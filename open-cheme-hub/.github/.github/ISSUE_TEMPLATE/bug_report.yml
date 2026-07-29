@@ -1,0 +1,88 @@
+name: 🐛 Bug in a template, workflow, or the website
+description: Something we ship doesn't work, or gives a wrong answer.
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For **wrong numbers** — a balance that doesn't close, a correlation that disagrees with a
+        reference — please say what you expected and where the reference value comes from. Those
+        are the most valuable reports we get and the easiest to act on with a citation.
+
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where?
+      options:
+        - templates
+        - workflows (Snakemake)
+        - workflows (GitHub Actions)
+        - workflows (Docker image)
+        - hub-website
+        - Somewhere else
+    validations:
+      required: true
+
+  - type: input
+    id: file
+    attributes:
+      label: Which file?
+      placeholder: templates/pid_tuning.py
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Exact commands or notebook cells. A minimal case beats a long description.
+      render: shell
+      placeholder: |
+        git clone https://github.com/open-cheme-hub/templates
+        cd templates
+        python pid_tuning.py --method ziegler-nichols
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Full traceback or output, as text. Screenshots of tracebacks are hard to search.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: >-
+        For numerical disagreements, give the expected value and its source (textbook, edition,
+        example number, or a paper DOI).
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Python version, and versions of the relevant packages. Docker image tag if you used one.
+      render: shell
+      placeholder: |
+        macOS 15.2 (arm64)
+        Python 3.12.4
+        numpy 2.1.1, scipy 1.14.1, matplotlib 3.9.2
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I installed the dependencies listed in the file header
+          required: true
+        - label: I searched existing issues
+          required: true

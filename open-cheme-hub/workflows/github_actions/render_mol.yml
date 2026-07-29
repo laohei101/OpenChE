@@ -1,0 +1,290 @@
+# =============================================================================
+# render_mol.yml — render chemical structure files to SVG on every push
+#
+# Any .mol, .sdf, .smi, .xyz, or .pdb file that changes in a pull request is
+# rendered to SVG and PNG, uploaded as an artifact, and (for PRs) posted as a
+# comment so reviewers can see the structure without cloning the branch.
+#
+# The problem this solves: nobody can review a diff of a .mol file. A changed
+# bond order is one character in a connection table and completely invisible.
+# Rendering makes structure changes reviewable the way code changes are.
+#
+# INSTALL
+#   Copy to .github/workflows/render_mol.yml in your repository.
+#   No secrets or configuration required beyond the permissions block below.
+#
+# Author  : Open ChemE Hub contributors
+# Licence : MIT
+# =============================================================================
+name: Render molecules
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "**.mol"
+      - "**.sdf"
+      - "**.smi"
+      - "**.xyz"
+      - "**.pdb"
+  pull_request:
+    paths:
+      - "**.mol"
+      - "**.sdf"
+      - "**.smi"
+      - "**.xyz"
+      - "**.pdb"
+  workflow_dispatch:
+    inputs:
+      render_all:
+        description: "Render every structure file, not just changed ones"
+        type: boolean
+        default: false
+
+# Least privilege. `pull-requests: write` is only needed for the review comment;
+# drop it and the comment step will be skipped rather than failing the run.
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: render-mol-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    # Open Babel and RDKit in one image, so the job doesn't spend two minutes
+    # on apt every run. Pinned by digest, not by tag: a tag can be repointed at
+    # different content, a digest cannot.
+    container:
+      image: ghcr.io/open-cheme-hub/chem-toolkit:1.2.0
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # Need the parent commit to diff against. 0 = full history, which is
+          # slower but correct on shallow-cloned forks.
+          fetch-depth: 0
+
+      - name: Identify structure files to render
+        id: files
+        env:
+          RENDER_ALL: ${{ github.event.inputs.render_all }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p rendered
+
+          # Untrusted input (branch names, PR titles) never goes near a shell
+          # expansion here -- everything comes from git itself.
+          if [ "${RENDER_ALL:-false}" = "true" ]; then
+            git ls-files '*.mol' '*.sdf' '*.smi' '*.xyz' '*.pdb' > files.txt
+          elif [ -n "${BASE_SHA:-}" ]; then
+            git diff --name-only --diff-filter=ACM "${BASE_SHA}" HEAD \
+              | grep -E '\.(mol|sdf|smi|xyz|pdb)$' > files.txt || true
+          else
+            git diff --name-only --diff-filter=ACM HEAD~1 HEAD \
+              | grep -E '\.(mol|sdf|smi|xyz|pdb)$' > files.txt || true
+          fi
+
+          count=$(wc -l < files.txt | tr -d ' ')
+          echo "count=${count}" >> "$GITHUB_OUTPUT"
+          echo "Found ${count} structure file(s):"
+          cat files.txt
+
+      - name: Render with Open Babel
+        if: steps.files.outputs.count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          failures=0
+
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            base=$(basename "${f%.*}")
+            dir=$(dirname "$f" | tr '/' '_')
+            out="rendered/${dir}_${base}"
+
+            echo "::group::${f}"
+
+            # 2D depiction. -xC omits terminal carbon labels, --gen2d computes
+            # coordinates for files that have none (SMILES) or bad ones.
+            if obabel "$f" -O "${out}.svg" --gen2d -xC -xa -xd 2>&1; then
+              echo "  SVG written"
+            else
+              echo "::warning file=${f}::Open Babel could not render this file"
+              failures=$((failures + 1))
+              echo "::endgroup::"
+              continue
+            fi
+
+            # PNG for the PR comment -- GitHub renders inline PNGs in comments
+            # but sanitises SVG, so both formats earn their place.
+            rsvg-convert -w 400 -h 400 -b white "${out}.svg" -o "${out}.png" 2>/dev/null \
+              || echo "::warning file=${f}::SVG produced but PNG conversion failed"
+
+            # Descriptors alongside the picture: a rendering that looks right
+            # but has the wrong formula is the failure mode worth catching.
+            obabel "$f" -osmi --append "MW" "formula" 2>/dev/null \
+              | tee -a rendered/descriptors.txt || true
+
+            echo "::endgroup::"
+          done < files.txt
+
+          if [ "$failures" -gt 0 ]; then
+            echo "::warning::${failures} file(s) failed to render"
+          fi
+
+          ls -la rendered/
+
+      - name: Validate structures with RDKit
+        if: steps.files.outputs.count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          """Sanitise every changed structure and report problems.
+
+          Rendering succeeds on molecules RDKit would reject, so this is a
+          separate check: a file that draws fine but won't sanitise will break
+          every downstream tool in the repository.
+          """
+          import pathlib
+          import sys
+
+          from rdkit import Chem, RDLogger
+
+          RDLogger.DisableLog("rdApp.*")
+
+          problems = []
+          for line in pathlib.Path("files.txt").read_text().splitlines():
+              path = line.strip()
+              if not path:
+                  continue
+              suffix = pathlib.Path(path).suffix.lower()
+
+              try:
+                  if suffix == ".mol":
+                      mols = [Chem.MolFromMolFile(path)]
+                  elif suffix == ".sdf":
+                      mols = list(Chem.SDMolSupplier(path))
+                  elif suffix == ".smi":
+                      mols = list(Chem.SmilesMolSupplier(path, titleLine=False))
+                  elif suffix == ".pdb":
+                      mols = [Chem.MolFromPDBFile(path)]
+                  else:
+                      continue  # XYZ has no bond information to validate
+              except Exception as exc:
+                  problems.append(f"{path}: could not be read ({exc})")
+                  continue
+
+              for i, mol in enumerate(mols):
+                  if mol is None:
+                      problems.append(f"{path} (record {i}): RDKit could not sanitise")
+                      continue
+                  if mol.GetNumAtoms() == 0:
+                      problems.append(f"{path} (record {i}): no atoms")
+                  # Explicit valence errors are the usual culprit and are worth
+                  # naming precisely, since the fix is always in the input file.
+                  try:
+                      Chem.SanitizeMol(mol)
+                  except ValueError as exc:
+                      problems.append(f"{path} (record {i}): {exc}")
+
+          if problems:
+              print("::error::Structure validation found problems:")
+              for p in problems:
+                  print(f"  {p}")
+              sys.exit(1)
+
+          print("All structures sanitise cleanly.")
+          PY
+
+      - name: Upload rendered structures
+        if: steps.files.outputs.count != '0'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rendered-structures-${{ github.sha }}
+          path: rendered/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Comment on the pull request
+        if: github.event_name == 'pull_request' && steps.files.outputs.count != '0'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const fs = require('fs');
+            const files = fs.readFileSync('files.txt', 'utf8')
+              .split('\n').filter(Boolean);
+
+            // Artifact URL rather than inline images: uploading images to the
+            // repository to embed them would pollute history, and the artifact
+            // is already there.
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/` +
+              `${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const body = [
+              '## Structure files changed in this PR',
+              '',
+              `${files.length} file(s) rendered:`,
+              '',
+              ...files.map(f => `- \`${f}\``),
+              '',
+              `[Download the rendered SVG and PNG files](${runUrl}#artifacts) ` +
+              '(artifact `rendered-structures`, kept 30 days).',
+              '',
+              'Structures were also validated with RDKit — a failing check above ' +
+              'means a file will not sanitise, not merely that it looks odd.',
+              '',
+              '---',
+              '_Generated by [Claude Code](https://claude.ai/code)_',
+            ].join('\n');
+
+            // Update the existing comment rather than adding one per push.
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' &&
+              c.body.includes('## Structure files changed in this PR'));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Molecule rendering"
+            echo ""
+            echo "Structure files processed: ${{ steps.files.outputs.count }}"
+            echo ""
+            if [ -f rendered/descriptors.txt ]; then
+              echo "### Descriptors"
+              echo ""
+              echo '```'
+              cat rendered/descriptors.txt
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

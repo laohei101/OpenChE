@@ -1,0 +1,154 @@
+# =============================================================================
+# Jekyll configuration for the Open ChemE Hub website
+#
+# Served by GitHub Pages from the /docs folder of the hub-website repository.
+# Settings -> Pages -> Source: "Deploy from a branch", branch main, folder /docs
+#
+# Local preview:
+#     cd docs
+#     bundle install
+#     bundle exec jekyll serve --livereload
+#     http://localhost:4000
+# =============================================================================
+
+# --- Site identity -----------------------------------------------------------
+title: Open ChemE Hub
+tagline: Open resources for chemical engineering and the sciences next door
+description: >-
+  A curated, community-maintained index of open-source tools, datasets, templates,
+  and reproducible workflows for chemical engineers, chemists, bioengineers, and
+  biomedical researchers.
+
+# CHANGE THESE when you deploy under your own organisation.
+#   url      : the scheme and host, no trailing slash
+#   baseurl  : the subpath, or "" if the site is at the domain root
+# For a GitHub Pages org site at https://open-cheme-hub.github.io, baseurl is "".
+# For a project site at https://<user>.github.io/hub-website, baseurl is "/hub-website".
+url: "https://open-cheme-hub.github.io"
+baseurl: ""
+
+github_username: open-cheme-hub
+org_url: "https://github.com/open-cheme-hub"
+
+# --- Build -------------------------------------------------------------------
+# No theme gem: the layouts and CSS in this repository are self-contained, which
+# keeps the site buildable with the stock GitHub Pages toolchain and avoids the
+# usual theme-version arguments.
+theme:
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+  auto_ids: true
+  toc_levels: 2..3
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# --- Front matter defaults ---------------------------------------------------
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# --- Navigation --------------------------------------------------------------
+# Rendered by _layouts/default.html. Order here is order in the header.
+nav:
+  - title: Home
+    url: /
+  - title: Get Started
+    url: /get-started/
+  - title: Search
+    url: /search/
+  - title: GitHub
+    url: https://github.com/open-cheme-hub
+    external: true
+
+# --- The lists, rendered as cards on the homepage ----------------------------
+# Adding a list means adding an entry here and adding its resources to
+# assets/data/resources.json. Nothing else needs to change.
+lists:
+  - name: Chemical Engineering
+    repo: awesome-chemical-engineering
+    icon: "⚗️"
+    blurb: >-
+      Process simulation, thermodynamics, reaction engineering, unit operations,
+      optimisation, control, and process safety.
+    highlights: [DWSIM, Cantera, CoolProp, Pyomo, IDAES]
+    count: 82
+
+  - name: Chemoinformatics
+    repo: awesome-chemoinformatics
+    icon: "🧬"
+    blurb: >-
+      Molecular representation, descriptors, QSAR, reaction prediction, chemical
+      databases, and machine learning for chemistry.
+    highlights: [RDKit, Open Babel, DeepChem, ChEMBL, Chemprop]
+    count: 96
+
+  - name: Bioengineering
+    repo: awesome-bioengineering
+    icon: "🦠"
+    blurb: >-
+      Bioprocess modelling, genome-scale metabolic models, synthetic biology,
+      biomaterials, and tissue engineering.
+    highlights: [COBRApy, BioSTEAM, SBOL, Tellurium, PhysiCell]
+    count: 82
+
+  - name: Medical Engineering
+    repo: awesome-medical-engineering
+    icon: "🩺"
+    blurb: >-
+      Device design, biomechanics, medical imaging, regulatory standards, clinical
+      engineering, and health informatics.
+    highlights: [3D Slicer, OpenSim, MONAI, FHIR, pydicom]
+    count: 93
+
+  - name: General Engineering
+    repo: awesome-general-engineering
+    icon: "🔧"
+    blurb: >-
+      CAD and CAE, control systems, signal processing, embedded and IoT, reliability,
+      documentation, and engineering ethics.
+    highlights: [FreeCAD, CalculiX, python-control, KiCad, Pint]
+    count: 93
+
+# --- The tool repositories, rendered as a second row of cards ----------------
+tools:
+  - name: Templates
+    repo: templates
+    icon: "📄"
+    blurb: >-
+      Material balance notebook, reactor sizing, PID tuning, unit conversions,
+      lab report, ELN entry, and a HAZOP-style safety checklist.
+
+  - name: Workflows
+    repo: workflows
+    icon: "⚙️"
+    blurb: >-
+      A reproducible Snakemake conformer pipeline, CI actions for chemical data,
+      and a Docker image with RDKit, Open Babel, and Cantera pinned.
+
+# --- SEO ---------------------------------------------------------------------
+lang: en_GB
+twitter:
+  card: summary
+social:
+  name: Open ChemE Hub
+  links:
+    - https://github.com/open-cheme-hub
+
+# --- Exclusions --------------------------------------------------------------
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - node_modules/
+  - README.md
+  - .sass-cache/
+  - .jekyll-cache/
