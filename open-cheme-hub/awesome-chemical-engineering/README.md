@@ -41,7 +41,6 @@ early-stage work, start with DWSIM.
 - [ChemSep](https://www.chemsep.org) — Rigorous rate-based and equilibrium-stage column simulator; the LITE edition is free and handles up to 40 stages and 10 components. Bundled with COCO. `gui` `distillation` `commercial-free-tier`
 - [IDAES-PSE](https://github.com/IDAES/idaes-pse) — US-DOE process systems engineering framework built on Pyomo, with equation-oriented flowsheets, property packages, and simultaneous design-and-control optimisation. Steep learning curve, unmatched capability. `python` `equation-oriented`
 - [OpenModelica](https://openmodelica.org) — Equation-based modelling environment for the Modelica language; with the ThermoPower and Modelica Fluid libraries it handles dynamic process models well. `modelica` `gui` `dynamic`
-- [Sim42 / Simulator42](https://github.com/JamesRedcliffe/sim42) — Lightweight Python sequential-modular flowsheet engine, useful when you want a simulator you can read the source of in an afternoon. `python` `educational`
 - [WaterTAP](https://github.com/watertap-org/watertap) — IDAES-based library for water treatment flowsheets: RO, ion exchange, crystallisation, with costing. `python` `water-treatment`
 - [pyflowsheet](https://github.com/qtdevs/pyflowsheet) — Generates publication-quality PFD and BFD drawings programmatically from Python, so flowsheet diagrams live in version control. `python` `drawing`
 
@@ -76,10 +75,7 @@ about the solver.
 - [HTRI alternatives — `ht` exchanger sizing](https://github.com/CalebBell/ht) — Shell-and-tube and plate exchanger sizing routines including Bell–Delaware shell-side calculations. `python`
 - [pdsim](https://github.com/ibell/pdsim) — Positive-displacement compressor and expander simulation (scroll, reciprocating), from the CoolProp author. `python` `compressors`
 - [OpenFOAM `reactingFoam` tutorials](https://www.openfoam.com/documentation/tutorial-guide) — Reference cases for reacting flow in packed and fluidised beds when lumped models stop being credible. `c++` `cfd`
-- [pyPI — Piping Isometrics](https://github.com/gvvsnrnaveen/pipe-flow) — Pipe network and pressure-drop calculations for utility and process piping, with fitting K-factors. `python` `piping`
 - [Ergun and packed-bed calculators in `fluids`](https://fluids.readthedocs.io) — Voidage correlations, packed and fluidised bed pressure drop, minimum fluidisation velocity. `python`
-- [MEMBRANE-py](https://github.com/PSEmembrane/membrane-py) — Module-level modelling of gas separation and reverse-osmosis membranes with counter-current and cross-flow patterns. `python` `membranes`
-- [Crystallisation population balance with `pyPBE`](https://github.com/adam-pbe/pypbe) — Solves population balance equations for nucleation, growth, and agglomeration in batch crystallisers. `python`
 
 ## Optimisation & Numerical Solvers
 
@@ -96,8 +92,6 @@ about the solver.
 - [do-mpc](https://www.do-mpc.com) — Model predictive control and moving-horizon estimation on CasADi, with robust multi-stage MPC for uncertain process models. `python` `mpc`
 - [SIPPY](https://github.com/CPCLAB-UNIPI/SIPPY) — System identification for process models: ARX, ARMAX, subspace methods, output-error, from step or PRBS data. `python` `system-id`
 - [TCLab](https://apmonitor.com/heat.htm) — $35 Arduino temperature-control kit with an open Python API; the standard hardware-in-the-loop platform for teaching PID and MPC. `hardware` `python` `course`
-- [pyHAZOP](https://github.com/process-safety/pyhazop) — Structured HAZOP worksheet management with guide-word prompts, deviation tracking, and export to spreadsheet. `python` `safety`
-- [SAFETI alternatives — `pyDispersion`](https://github.com/consequence-modelling/pydispersion) — Gaussian plume and dense-gas dispersion models for consequence analysis, implementing Britter–McQuaid and SLAB-style correlations. `python` `consequence-modelling`
 - [ALOHA](https://www.epa.gov/cameo/aloha-software) — EPA/NOAA atmospheric dispersion model for accidental chemical releases, with toxic, flammable, and overpressure footprints. Free, widely used by emergency planners. `gui` `windows` `macos`
 - [CAMEO Chemicals](https://cameochemicals.noaa.gov) — Reactivity matrix and response information for ~6000 hazardous materials; check binary incompatibilities before you mix anything. `database` `web`
 - [OSHA PSM standard 29 CFR 1910.119](https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.119) — The process safety management rule itself; read the source rather than a summary of it. `standard` `regulatory`
@@ -118,7 +112,6 @@ about the solver.
 - [DETHERM](https://dechema.de/en/detherm.html) — DECHEMA's thermophysical property database, ~10 million data points; institutional subscription, but the free search shows what data exists before you pay. `database` `commercial-free-tier`
 - [DIPPR 801 sample set](https://www.aiche.org/dippr) — Evaluated pure-component properties; a public sample of ~100 compounds is available for teaching. `dataset`
 - [ChemSep component database](https://www.chemsep.org/downloads) — ~430 compounds with UNIFAC groups and parameters, distributed as an open XML file that other tools can read. `dataset` `xml`
-- [Distillation column benchmark problems (ADCHEM/PSE sets)](https://github.com/process-benchmarks) — Standard column, reactor, and plant-wide control benchmarks used for comparing solvers and controllers. `benchmark`
 - [Tennessee Eastman process simulator](https://github.com/camaramm/tennessee-eastman-profBraatz) — The canonical plant-wide control and fault-detection benchmark, with 21 fault scenarios. `matlab` `fortran` `benchmark`
 - [Open Reaction Database](https://open-reaction-database.org) — Structured reaction records with conditions and yields; increasingly the substrate for reaction ML. `dataset` `api`
 
@@ -126,11 +119,10 @@ about the solver.
 
 - [Introduction to Chemical Engineering Analysis (Doherty, MIT OCW 10.10)](https://ocw.mit.edu/courses/10-10-introduction-to-chemical-engineering-analysis-fall-2005/) — Full lecture notes and problem sets on balances and process analysis. `course` `free`
 - [LearnChemE](https://learncheme.com) — Hundreds of short screencasts, interactive simulations, and ConcepTests covering the whole undergraduate curriculum, from CU Boulder. `course` `interactive`
-- [Introduction to Chemical Engineering Computing companion code](https://github.com/bafinlayson) — Worked Python and Excel implementations of the classic Finlayson problem set. `python` `book`
 - [APMonitor / Process Dynamics and Control course](https://apmonitor.com/pdc) — Free 12-week course with Python exercises and the TCLab hardware; the best open route into industrial control. `course` `python`
 - [Computational Thermodynamics with Clapeyron.jl notebooks](https://github.com/ClapeyronThermo/introduction-to-computational-thermodynamics) — Pluto notebooks walking from ideal gases to SAFT with runnable code. `julia` `notebooks`
 - [Chemical Process Dynamics and Controls (LibreTexts)](https://eng.libretexts.org/Bookshelves/Industrial_and_Systems_Engineering/Chemical_Process_Dynamics_and_Controls_(Woolf)) — Complete open textbook, CC-licensed, with worked examples. `book` `free`
-- [Distillation Design and Control Using Aspen Simulation — open companion notes](https://github.com/jkantor) — Jeff Kantor's Python notebook series covering separations, control, and optimisation without the licence. `notebooks` `python`
+- [CBE30338 Chemical Process Control](https://github.com/jckantor/CBE30338) — Jeff Kantor's notebook-based course on process dynamics, control, and optimisation, runnable end to end. `notebooks` `python`
 - [Cantera tutorials and examples](https://cantera.org/stable/examples/index.html) — Runnable scripts for equilibrium, flames, reactor networks, and surface chemistry. `tutorial` `python`
 - [Perry's Chemical Engineers' Handbook — open equivalents index](https://en.wikibooks.org/wiki/Introduction_to_Chemical_Engineering_Processes) — Wikibooks' open process-engineering text; not Perry's, but free and improving. `book` `free`
 - [Software Carpentry for scientific computing](https://software-carpentry.org/lessons/) — Shell, Git, and Python fundamentals; the missing prerequisite for most of this list. `course` `free`

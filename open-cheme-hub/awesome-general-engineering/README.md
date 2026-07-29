@@ -109,7 +109,6 @@ Everything here is free to use.
 
 - [`reliability`](https://reliability.readthedocs.io) — Weibull and other life-distribution fitting, accelerated life testing, and repairable systems analysis. `python`
 - [`lifelines`](https://lifelines.readthedocs.io) — Survival analysis, directly applicable to time-to-failure data and censored observations. `python`
-- [OpenFTA / `pyfaulttree`](https://github.com/reliability-tools/pyfaulttree) — Fault tree construction, minimal cut sets, and top-event probability calculation. `python` `risk`
 - [openMAINT](https://www.openmaint.org) — Open maintenance management: asset registry, preventive schedules, work orders. `java` `web`
 - [NASA Reliability Preferred Practices](https://ntrs.nasa.gov) — Free, specific, hard-won guidance documents on design for reliability. `guide` `free`
 
@@ -130,13 +129,12 @@ Everything here is free to use.
 - [Taiga](https://www.taiga.io) — Agile project management that's pleasant to use for small engineering teams. `python` `web`
 - [Plane](https://plane.so) — Modern self-hostable issue and project tracker, a lighter alternative to Jira. `typescript` `web`
 - [`ganttproject`](https://www.ganttproject.biz) — Desktop scheduling with critical path and resource loading, exporting to MS Project format. `java` `gui`
-- [Earned value with `pyearnedvalue`](https://github.com/project-tools/pyearnedvalue) — Computes EVM metrics (CPI, SPI, EAC) from a task list and actuals. `python`
 
 ## Engineering Ethics & Professional Practice
 
 - [NSPE Code of Ethics for Engineers](https://www.nspe.org/resources/ethics/code-ethics) — The reference code, plus a searchable archive of Board of Ethical Review cases with reasoning. `reference` `free`
 - [Online Ethics Center for Engineering and Science](https://onlineethics.org) — Case studies, teaching materials, and discussion guides across engineering disciplines. `course` `free`
-- [Engineering Disasters case archive (TU Delft / Purdue open materials)](https://ethicsunwrapped.utexas.edu) — Structured case discussions — Challenger, Ford Pinto, Flint, Boeing 737 MAX — with the decision context intact. `case-studies` `free`
+- [Ethics Unwrapped](https://ethicsunwrapped.utexas.edu) — Short video case studies with the decision context intact — Challenger, Ford Pinto, Volkswagen — from UT Austin. `case-studies` `free`
 - [IEEE Code of Ethics](https://www.ieee.org/about/corporate/governance/p7-8.html) — Concise and widely referenced, especially for software and systems work. `reference` `free`
 - [AIChE Code of Ethics](https://www.aiche.org/about/governance/code-ethics) — Chemical engineering's professional code, with explicit process safety obligations. `reference` `free`
 - [Ethics of AI in engineering — ACM Code](https://www.acm.org/code-of-ethics) — Relevant whenever a model output drives a physical decision. `reference` `free`

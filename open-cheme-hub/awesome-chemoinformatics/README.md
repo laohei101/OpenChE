@@ -73,7 +73,7 @@ Everything here is free to use. Descriptions say what a tool does, not how good 
 
 - [DeepChem](https://deepchem.io) — Batteries-included library for molecular ML: featurisers, splitters, model zoo, and the MoleculeNet loaders. `python` `tensorflow` `pytorch`
 - [QSARtuna](https://github.com/MolecularAI/QSARtuna) — Automated QSAR model building with hyperparameter search, uncertainty estimation, and reproducible model cards, from AstraZeneca. `python`
-- [Applicability domain tools — `applicability-domain`](https://github.com/hkaneko1985/dcekit) — Distance-to-model and leverage methods for deciding when a QSAR prediction should be trusted. `python`
+- [DCEKit](https://github.com/hkaneko1985/dcekit) — Data chemometrics toolkit including applicability-domain methods for deciding when a QSAR prediction should be trusted. `python`
 - [OECD QSAR Toolbox](https://qsartoolbox.org) — Read-across, category formation, and regulatory-grade QSAR workflows; free registration, used for REACH dossiers. `gui` `regulatory`
 - [VEGA QSAR](https://www.vegahub.eu) — Free platform of validated QSAR models for toxicity and environmental endpoints, each reporting applicability domain and reliability. `gui` `java` `regulatory`
 - [scikit-mol](https://github.com/EBjerrum/scikit-mol) — RDKit featurisers as scikit-learn transformers so molecules drop straight into a `Pipeline` with proper cross-validation. `python`
@@ -136,7 +136,7 @@ Everything here is free to use. Descriptions say what a tool does, not how good 
 - [MoleculeNet](https://moleculenet.org) — The standard benchmark collection for molecular property prediction, with recommended splits. `benchmark` `dataset`
 - [Therapeutics Data Commons](https://tdcommons.ai) — Curated ML tasks across ADMET, HTS, and synthesis, with leaderboards and consistent splits. `benchmark` `python`
 - [Polaris](https://polarishub.io) — Benchmark platform emphasising realistic splits and error analysis over leaderboard chasing. `benchmark` `python`
-- [scaffold and time splits — `chemsplit` utilities](https://github.com/rdkit/rdkit/discussions) — Random splits inflate molecular ML results; scaffold, cluster, and temporal splits are how you find out if a model generalises. `methodology`
+- [Dataset splitting strategies (RDKit Discussions)](https://github.com/rdkit/rdkit/discussions) — Not a package but a recurring discussion worth reading: random splits inflate molecular ML results, scaffold and temporal splits show whether a model generalises. `methodology`
 
 ## Learning Resources
 

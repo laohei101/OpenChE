@@ -80,7 +80,7 @@ lists:
       Process simulation, thermodynamics, reaction engineering, unit operations,
       optimisation, control, and process safety.
     highlights: [DWSIM, Cantera, CoolProp, Pyomo, IDAES]
-    count: 90
+    count: 82
 
   - name: Chemoinformatics
     repo: awesome-chemoinformatics
@@ -98,7 +98,7 @@ lists:
       Bioprocess modelling, genome-scale metabolic models, synthetic biology,
       biomaterials, and tissue engineering.
     highlights: [COBRApy, BioSTEAM, SBOL, Tellurium, PhysiCell]
-    count: 88
+    count: 82
 
   - name: Medical Engineering
     repo: awesome-medical-engineering
@@ -107,7 +107,7 @@ lists:
       Device design, biomechanics, medical imaging, regulatory standards, clinical
       engineering, and health informatics.
     highlights: [3D Slicer, OpenSim, MONAI, FHIR, pydicom]
-    count: 94
+    count: 93
 
   - name: General Engineering
     repo: awesome-general-engineering
@@ -116,7 +116,7 @@ lists:
       CAD and CAE, control systems, signal processing, embedded and IoT, reliability,
       documentation, and engineering ethics.
     highlights: [FreeCAD, CalculiX, python-control, KiCad, Pint]
-    count: 95
+    count: 93
 
 # --- The tool repositories, rendered as a second row of cards ----------------
 tools:

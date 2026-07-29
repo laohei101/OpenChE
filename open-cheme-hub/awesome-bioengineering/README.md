@@ -37,11 +37,8 @@ Everything here is free to use.
 
 - [BioSTEAM](https://biosteam.readthedocs.io) — Fast techno-economic analysis and process simulation for biorefineries, with unit operations, costing, and uncertainty propagation built in. `python` `tea`
 - [PyFOOMB](https://github.com/MicroPhen/pyFOOMB) — Object-oriented bioprocess modelling with parameter estimation, uncertainty quantification, and support for multi-experiment fitting. `python` `parameter-estimation`
-- [bioprocess-control (`pyIDES`)](https://github.com/bioprocess-tools/pyides) — Fed-batch feeding strategy design and soft-sensor implementations for substrate-limited fermentation. `python` `control`
-- [Bioreactor CFD cases for OpenFOAM](https://github.com/OpenFOAM/OpenFOAM-dev) — Stirred-tank and airlift tutorial cases covering mixing time, kLa estimation, and shear distribution. `c++` `cfd`
-- [Aspen alternatives for fermentation — DWSIM bio templates](https://dwsim.org) — Flowsheeting for downstream recovery trains: centrifugation, filtration, chromatography, drying. `gui`
+- [OpenFOAM](https://www.openfoam.com) — General CFD; the mixer and multiphase tutorials are the usual starting point for stirred-tank mixing time and shear studies. No bioreactor-specific case ships with it. `c++` `cfd`
 - [SciML `Catalyst.jl` for bioreactions](https://github.com/SciML/Catalyst.jl) — Symbolic reaction networks that compile to deterministic ODEs or stochastic jump processes, useful when copy numbers are low. `julia`
-- [kLa and mass-transfer correlations in `bioengineering-utils`](https://github.com/bioprocess-tools/bioeng-utils) — Van 't Riet and Garcia-Ochoa correlations for oxygen transfer, with power-number lookups for standard impellers. `python`
 
 ## Genome-Scale Metabolic Models
 
@@ -95,12 +92,10 @@ Everything here is free to use.
 - [Gibbon toolbox for MATLAB](https://www.gibboncode.org) — Open toolbox for computational biomechanics and biomaterial FEA, with FEBio integration and meshing utilities. `matlab`
 - [FEBio](https://febio.org) — Finite element solver purpose-built for biological materials: hyperelasticity, poroelasticity, growth and remodelling. `c++` `fea`
 - [Materials Project — biocompatible alloys subset](https://materialsproject.org) — Computed properties for the metals and ceramics used in implants, with an open API. `database` `api`
-- [pyDRT for degradation modelling](https://github.com/biomaterials-tools/pydrt) — Fits hydrolytic and enzymatic degradation kinetics to mass-loss and molecular-weight data. `python`
 
 ## Tissue Engineering & Biofabrication
 
 - [Slic3r / PrusaSlicer for bioprinting](https://github.com/prusa3d/PrusaSlicer) — Open slicers adapted for extrusion bioprinting; full G-code control matters more than a vendor's fixed profile. `c++` `gui`
-- [BioPrint toolpath planning — `bioprint-planner`](https://github.com/biofab-tools/bioprint-planner) — Generates infill patterns and toolpaths for hydrogel constructs with viability-aware speed limits. `python`
 - [CompuCell3D](https://compucell3d.org) — Multi-cell modelling environment (cellular Potts) for morphogenesis, cell sorting, and tissue growth. `c++` `python` `gui`
 - [PhysiCell](http://physicell.org) — Agent-based simulator for multicellular systems with diffusive substrates; scales to millions of cells. `c++`
 - [Chaste](https://chaste.github.io) — Cambridge's simulation library for cardiac electrophysiology and cell-based tissue models, with strong testing culture. `c++`
@@ -128,7 +123,6 @@ Everything here is free to use.
 
 - [Systems Biology: Constraint-Based Reconstruction and Analysis (Palsson) course notes](https://systemsbiology.ucsd.edu) — The canonical treatment of genome-scale modelling, with accompanying tutorials. `course` `book`
 - [COBRApy documentation tutorials](https://cobrapy.readthedocs.io/en/latest/getting_started.html) — Worked from a first FBA to gene-deletion screens; do these before reading papers. `tutorial` `free`
-- [Bioprocess Engineering Principles (Doran) problem companions](https://github.com/bioprocess-teaching) — Community-written Python solutions to the standard bioprocess textbook problems. `python` `notebooks`
 - [MIT 20.320 Analysis of Biomolecular and Cellular Systems (OCW)](https://ocw.mit.edu/courses/20-320-analysis-of-biomolecular-and-cellular-systems-fall-2012/) — Quantitative modelling of receptor binding, signalling, and pharmacokinetics. `course` `free`
 - [iGEM team wiki archive](http://igem.org/Main_Page) — Two decades of team wikis: a large, uneven, and genuinely useful record of what synthetic biology projects actually attempted. `archive`
 - [Build-A-Cell open community resources](https://www.buildacell.org) — Materials and talks from the synthetic cell community, useful for bottom-up bioengineering. `community` `course`

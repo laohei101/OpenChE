@@ -36,7 +36,7 @@ cleared or approved medical device. Software used in a device or in patient care
 
 ## Medical Device Design & Development
 
-- [OpenSafely / Open Source Medical Device projects at OSHWA](https://www.oshwa.org) — Certification and directory for open hardware, including a growing set of documented medical and lab devices. `hardware` `community`
+- [Open Source Hardware Association (OSHWA)](https://www.oshwa.org) — Certification programme and directory for open hardware, including documented medical and laboratory devices. `hardware` `community`
 - [FreeCAD](https://www.freecad.org) — Parametric 3D CAD with an assembly workbench and full Python scripting; adequate for enclosure, fixture, and instrument design. `python` `c++` `gui`
 - [OpenSCAD](https://openscad.org) — Code-defined CAD, which makes device geometry diffable, reviewable, and parameterisable across a size range. `cli` `gui`
 - [KiCad](https://www.kicad.org) — Full electronics design suite for instrument and device electronics, with 3D board visualisation and manufacturing outputs. `gui` `electronics`
@@ -100,7 +100,6 @@ official page, freely available guidance, or open summaries.
 ## Quality Systems & Risk Management
 
 - [openregulatory templates](https://github.com/openregulatory/templates) — Markdown templates for the full technical documentation set: risk management file, software architecture, verification plans, usability engineering. `templates` `free`
-- [FMEA and FTA tooling — `pyfmea`](https://github.com/reliability-tools/pyfmea) — Structured failure mode and effects analysis with risk priority numbers and traceability to mitigations. `python` `risk`
 - [Traceability with plain Git — `doorstop`](https://doorstop.readthedocs.io) — Requirements management in version-controlled text files, with automated traceability matrices. Auditable and mergeable. `python` `requirements`
 - [SBOM tooling — `syft` / `cyclonedx`](https://github.com/anchore/syft) — Generates software bills of materials, now expected in FDA premarket cybersecurity documentation. `cli` `security`
 - [Usability engineering per IEC 62366 — public summaries](https://www.iso.org/standard/63179.html) — Human factors process for devices; the FDA's separate human factors guidance is free and covers the same ground practically. `standard`
