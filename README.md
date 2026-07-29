@@ -1,152 +1,153 @@
 # OpenChemE
 
-**"GitHub" for Chemical Engineers** — open, curated, community-maintained resources for chemical
-engineering and the sciences next door.
+**"GitHub" for Chemical Engineers** — a verified, open engineering commons.
 
-Chemical engineers, chemists, bioengineers, and biomedical researchers keep rebuilding the same
-things: a material balance notebook, a thermodynamics lookup, a HAZOP checklist, a conformer
-generation pipeline. Meanwhile the best open tooling in these fields is scattered across
-university pages, dead SourceForge links, and half-abandoned wikis.
+Chemical engineers keep rebuilding the same material balance, hunting the same dead SourceForge
+link, and writing the same HAZOP checklist from memory. OpenChemE turns scattered open-source
+tools into a **structured, verifiable catalog** with runnable templates and reproducible
+workflows attached.
 
-This repository holds the whole hub: the curated lists, the runnable templates and workflows, and
-the website that ties them together.
+The thing that makes it different is not the number of resources. It is that every record tells
+you **what has actually been checked** — and, right now, mostly says "nothing yet", because that
+is the truth.
+
+```bash
+git clone https://github.com/laohei101/OpenChemE && cd OpenChemE
+python -m http.server 8000 --directory public     # the site, no build step
+python templates/unit_conversions.py              # a template, no dependencies
+```
 
 ---
 
-## What's in here
+## What's here
+
+| | |
+| --- | --- |
+| **361 resource records** | Structured YAML across chemical engineering, chemoinformatics, bioengineering, medical engineering, and general engineering |
+| **9 runnable templates** | Material balance notebook, reactor sizing, PID tuning, unit conversions, lab report, ELN entry, HAZOP checklist |
+| **Reproducible workflows** | Snakemake conformer pipeline, CI actions for chemical data, a pinned Docker image |
+| **A static site** | Search, explore, compare, and a detail page for every record |
+| **Verification tiers** | Every claim carries a tier, a date, and evidence — or says plainly that it has none |
 
 ```
-.
-├── public/              ← the website (this is what gets deployed)
-│   ├── index.html
-│   ├── get-started.html
-│   ├── search.html
-│   └── assets/          css, js, and the search index
-├── vercel.json          ← deployment config; serves public/ as static files
-└── open-cheme-hub/      ← source for nine GitHub repositories
-    ├── .github/                          community health files, org profile
-    ├── awesome-chemical-engineering/     82 entries
-    ├── awesome-chemoinformatics/         96 entries
-    ├── awesome-bioengineering/           82 entries
-    ├── awesome-medical-engineering/      93 entries
-    ├── awesome-general-engineering/      93 entries
-    ├── templates/                        9 fork-and-edit files
-    ├── workflows/                        Snakemake, GitHub Actions, Docker
-    ├── hub-website/                      mirror of public/ for GitHub Pages
-    └── setup_github.sh                   publishes all nine as separate repos
+catalog/     ← the single source of truth (edit this)
+  resources/   361 YAML records
+  projects/    guided project records
+  taxonomies/  controlled vocabulary
+schemas/     JSON Schema; the validator enforces it
+scripts/     validator, generators, smoke tests
+lists/       GENERATED Markdown lists
+public/      the website (public/r/ is GENERATED) — Vercel serves this
+templates/   runnable engineering material
+workflows/   Snakemake, GitHub Actions, Docker
+tools/legacy/ superseded scripts, kept for reference
 ```
 
-Around **446 curated entries** plus the runnable material.
+## How it works
 
----
+**One source of truth.** `catalog/resources/*.yaml` is the only thing you edit. Everything else
+is generated and CI fails if a generated file drifts:
+
+```
+catalog/resources/*.yaml
+      ├─ scripts/generate_markdown_lists.py   → lists/awesome-*.md
+      ├─ scripts/generate_search_index.py     → public/assets/data/resources.json
+      └─ scripts/generate_resource_pages.py   → public/r/*.html, explore, compare
+```
+
+The previous structure kept resources in two hand-maintained places. They drifted to 45%
+coverage before anyone noticed. That is the mistake this design exists to prevent — see
+[ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Read this before trusting the catalog
+
+**All 361 records are at verification tier 0. Licence and maintenance status are `unknown` on
+nearly all of them.**
+
+They were imported from Markdown bullets, which never recorded those fields, and the migration
+environment could not reach the sources needed to confirm them — its egress policy denied roughly
+99% of hosts, including all of `github.com`. An automated link check returned 403 on 358 of 386
+URLs, which is indistinguishable from a dead link and therefore useless as evidence.
+
+The alternative was to mark well-known projects as verified from memory. That would look like
+progress and would be fabrication, so the catalog says tier 0 and explains why. Unknown fields
+render as *not confirmed* in italics on every page, never as blanks that read like answers.
+
+**Verifying records is the most useful contribution available right now**, and it needs no
+special skill — pick a tool you know, confirm its licence from the project itself, open a PR.
+[How verification works.](docs/verification-methodology.md)
+
+## Quick start
+
+```bash
+pip install -r requirements-dev.txt
+
+python scripts/validate_catalog.py             # 361 records, 0 errors
+python -m pytest tests -q                      # 33 tests
+python scripts/run_template_smoke_tests.py     # 16 checks on the templates
+
+python -m http.server 8899 --directory public  # preview at localhost:8899
+```
+
+After changing anything in `catalog/`, regenerate and commit both halves together:
+
+```bash
+python scripts/generate_markdown_lists.py
+python scripts/generate_search_index.py
+python scripts/generate_resource_pages.py
+```
 
 ## The website
 
-Plain static HTML, CSS, and JavaScript. **No build step, no framework, no dependencies.**
+Plain static HTML — no framework, no build step, no external requests. `vercel.json` points
+Vercel at `public/`; pushing to the default branch deploys.
 
-**Local preview:**
+> **If a deployment 404s**, check *Vercel → Settings → General → Root Directory*. It must be
+> **empty** (the repository root). Vercel looks for `vercel.json` and `public/` relative to that
+> setting and finds neither if it points into a subdirectory.
 
-```bash
-cd public
-python3 -m http.server 8000
-# http://localhost:8000
-```
+## Contributing
 
-Don't open the files with `file://` — `search.js` fetches the JSON index, and browsers block
-`fetch` on `file://` origins, so search will look broken when nothing is wrong.
+| I want to… | Do this |
+| --- | --- |
+| Verify a record I know well | Confirm its licence and maintenance from the project, raise its tier, open a PR — **most valuable thing right now** |
+| Add a resource | Copy an existing YAML in `catalog/resources/`, regenerate, PR |
+| Fix a dead link | Edit the record's `canonical_url`, or open an issue |
+| Add a guided project | See the [pilot record](catalog/projects/material-balance-with-recycle.yaml) and the [project schema](schemas/project.schema.json) |
+| Ask something | [Discussions](https://github.com/laohei101/OpenChemE/discussions) |
 
-**Deployment.** `vercel.json` sets `outputDirectory` to `public`; Vercel serves it statically with
-no build command. Pushing to the default branch deploys.
+Full guide: [CONTRIBUTING.md](CONTRIBUTING.md) · [Governance](GOVERNANCE.md) · [Roadmap](ROADMAP.md)
 
-> **If the deployment still 404s**, it is almost always the **Root Directory** setting in the
-> Vercel project. *Project → Settings → General → Root Directory* must be **empty** (the
-> repository root), not `open-cheme-hub` or anything else. Vercel looks for `vercel.json` and
-> `public/` relative to that setting and finds neither if it points into a subdirectory.
->
-> Second most likely: the deployment predates these files. Trigger a fresh one from
-> *Deployments → Redeploy*, or just push.
+**We are looking for a process safety reviewer.** Several files touch HAZOP methodology and
+regulatory material. They carry careful disclaimers, but no qualified process safety engineer has
+reviewed them — see [MAINTAINERS.md](MAINTAINERS.md).
 
-Editing: content is in the three HTML files, colours are CSS custom properties at the top of
-`assets/css/style.css`, and the search index is regenerated by
-`open-cheme-hub/hub-website/build_index.py`. Full detail in
-[`open-cheme-hub/hub-website/README.md`](open-cheme-hub/hub-website/README.md).
+## Documentation
 
----
+| Document | What it covers |
+| --- | --- |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | How the pieces fit and why |
+| [MIGRATION.md](MIGRATION.md) | What moved where, and the naming decision |
+| [CLAUDE.md](CLAUDE.md) | Instructions for coding agents |
+| [docs/verification-methodology.md](docs/verification-methodology.md) | What each tier means and how to promote a record |
+| [docs/catalog-methodology.md](docs/catalog-methodology.md) | What gets in, what stays out |
+| [ROADMAP.md](ROADMAP.md) | What is next, and what is deliberately not being built |
 
-## Publishing the organisation
+## Status
 
-The nine directories under `open-cheme-hub/` are designed to become nine separate repositories
-under the **OpenChemE** GitHub organisation. Every cross-reference already points there.
+Phase 0 complete, Phase 1 started. The catalog, the generation pipeline, CI, and the trust UI
+exist. Raising records above tier 0 is the current work.
 
-```bash
-cd open-cheme-hub
-gh auth login                       # scopes needed: repo, admin:org, workflow
-./setup_github.sh --dry-run         # see the plan first
-./setup_github.sh                   # create and push
-```
-
-The script is idempotent — a second run reports what already exists and pushes only what changed.
-`./setup_github.sh --help` covers the options.
-
-Two things it can't do for you, and says so when it finishes:
-
-1. **Create the organisation.** GitHub's REST API has no endpoint for creating a free
-   organisation — only Enterprise Cloud accounts can do it programmatically. If the `OpenChemE`
-   org doesn't exist yet, the script points you at the ~30-second manual step; or publish under
-   your own account with `--user`.
-2. **Enable organisation Discussions.** *Org Settings → Discussions*, sourced from the `.github`
-   repository, with categories **Q&A**, **Ideas**, and **Show and Tell** — the issue templates
-   link to those three by name and will 404 until they exist.
-
-Conduct and security reports go to **yu.dai@mail.utoronto.ca**, set in `CODE_OF_CONDUCT.md`,
-`SECURITY.md`, and `SUPPORT.md`.
-
----
-
-## On trust
-
-**The list links have not been machine-verified.** Every URL was written from knowledge of the
-project rather than a live fetch, and an automated check couldn't run in the environment these
-were built in. Expect some URL drift — projects move, docs reorganise.
-
-Each list repository carries a `lychee` link checker at `.github/workflows/link-check.yml`. Run it
-(*Actions → Link check → Run workflow*) as the first thing after publishing. It reports to the job
-summary and, on its weekly schedule, opens an issue for anything broken. Expect a handful of false
-positives: ISO, IEC, FDA, and publisher sites routinely block automated requests, and those are
-worth checking by hand rather than deleting.
-
-Entries that were plausible-sounding names rather than projects that could be placed as real have
-already been removed — 17 of them — and six more corrected where the project was real but the name
-or URL wasn't.
-
----
-
-## Verified
-
-Everything runnable has been executed:
-
-```bash
-cd open-cheme-hub/templates
-python3 unit_conversions.py                 # worked examples and sanity checks
-python3 -m doctest unit_conversions.py      # passes clean
-python3 reactor_design_skeleton.py -X 0.9 --sweep
-python3 pid_tuning.py --identify
-```
-
-The material balance notebook's cells execute in order with every balance closing to machine
-precision. The website was checked in headless Chromium at 1280 px and 390 px: no console errors,
-no failed requests, search returns correct results, zero horizontal overflow on mobile.
-
-Not executed here: the Snakemake pipeline and the Docker image, which need RDKit and Cantera.
-`cd open-cheme-hub/workflows/docker && docker build -t chem-toolkit:1.2.0 .` runs a smoke test as
-part of the build, so a broken image fails at build time rather than in someone's pipeline later.
-
----
+The nine-repository split is **deferred** — `tools/legacy/setup_github.sh` still performs it, but
+a monorepo is right until there are enough contributors to justify nine issue trackers.
 
 ## Licence
 
-Prose, documentation, and list content: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-Code, templates, workflows, website, and configuration: MIT.
+Prose, documentation, and catalog content: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Code, templates, workflows, and the website: MIT.
 Linked projects keep their own licences — check before building on any of them.
 
-Nothing here is engineering, clinical, or regulatory advice.
+Nothing here is engineering, clinical, or regulatory advice. Work affecting a real plant, patient,
+or safety case needs review by a qualified professional who is accountable for it.
+
+Contact: **yu.dai@mail.utoronto.ca**

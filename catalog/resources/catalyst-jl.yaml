@@ -1,0 +1,45 @@
+# Canonical catalog record. Edit this, not the generated views.
+schema_version: 1
+slug: catalyst-jl
+name: Catalyst.jl
+kind: library
+canonical_url: https://github.com/SciML/Catalyst.jl
+summary: Domain-specific language for reaction networks in Julia that compiles to ODE, SDE, or jump-process
+  models
+domains:
+- chemical-engineering
+- bioengineering
+categories:
+- reaction-engineering
+- bioprocess-modelling
+audiences:
+- student
+- researcher
+- industry
+access:
+  model: unknown
+  free_tier: true
+  notes: The legacy list guaranteed the resource is free to use, but the access model was never recorded.
+    Needs confirmation.
+license:
+  spdx: UNKNOWN
+  source: unknown
+  notes: Not recorded in the legacy list. Confirm from the project before promoting this record above
+    verification tier 1.
+maturity: unknown
+maintenance_status: unknown
+verification:
+  tier: 0
+  status: submitted
+  notes:
+  - Imported from the legacy Markdown list; no field has been independently confirmed.
+  - 'Merged duplicate record ''sciml-catalyst-jl-for-bioreactions'' (same canonical URL). Its description
+    was: Symbolic reaction networks that compile to deterministic ODEs or stochastic jump processes, useful
+    when copy numbers are low'
+link_status: unknown
+source_list: awesome-chemical-engineering
+source_section: Reaction Engineering & Kinetics
+tags:
+- uncategorised
+languages:
+- julia

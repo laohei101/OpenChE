@@ -780,3 +780,125 @@ mark {
   body { color: #000; background: #fff; }
   a::after { content: " (" attr(href) ")"; font-size: .8em; color: #555; }
 }
+
+/* -------------------------------------------------------------------------
+   11. Generated catalog pages
+   (resource detail, explore, compare)
+
+   Design constraint from spec 16.3: an unverified record must never look like
+   a verified one, and status must not be communicated by colour alone. Every
+   tier therefore carries a number and a word, and the colour is a reinforcing
+   cue rather than the message.
+   ------------------------------------------------------------------------- */
+
+.verify {
+  margin: 0 0 2rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--text-faint);
+  background: var(--bg-alt);
+}
+.verify-head {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  margin-bottom: .5rem;
+}
+.verify-tier {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  background: var(--text-faint);
+  color: var(--bg);
+  white-space: nowrap;
+}
+.verify-head strong { font-size: 1rem; }
+.verify-what { margin: 0 0 .5rem; color: var(--text-muted); font-size: .93rem; }
+.verify-meta { margin: 0; font-size: .85rem; color: var(--text-faint); }
+.verify-notes { margin-top: .75rem; font-size: .88rem; }
+.verify-notes summary { cursor: pointer; color: var(--text-muted); }
+.verify-notes ul, .verify-evidence ul { margin: .5rem 0 0; padding-left: 1.2rem; }
+.verify-evidence { margin-top: .75rem; }
+.verify-evidence h3 {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-faint);
+  margin: 0 0 .3rem;
+}
+
+/* Tier 0 stays deliberately grey and flat: nothing has been checked, and the
+   page should not imply otherwise. Higher tiers earn colour. */
+.verify-t0 { border-left-color: var(--text-faint); }
+.verify-t1 { border-left-color: #7a86c2; }
+.verify-t1 .verify-tier { background: #7a86c2; }
+.verify-t2 { border-left-color: var(--brand); }
+.verify-t2 .verify-tier { background: var(--brand); }
+.verify-t3 { border-left-color: #2f8f4e; }
+.verify-t3 .verify-tier { background: #2f8f4e; }
+.verify-t4 { border-left-color: #1d6b3a; }
+.verify-t4 .verify-tier { background: #1d6b3a; }
+
+/* "not confirmed" must read as a gap in the record, not as a value. */
+.unknown {
+  color: var(--text-faint);
+  font-style: italic;
+  border-bottom: 1px dotted var(--text-faint);
+  cursor: help;
+}
+
+.facts { width: 100%; margin: 0 0 1.5rem; display: table; }
+.facts th {
+  width: 34%;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  vertical-align: top;
+  white-space: nowrap;
+}
+.facts td { color: var(--text); }
+
+.limitations ul { border-left: 3px solid var(--accent); padding-left: 1.2rem; margin-left: 0; }
+
+.compare { display: block; overflow-x: auto; font-size: .9rem; }
+.compare th[scope="row"] {
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.compare thead th { border-bottom: 2px solid var(--border); }
+.compare td { vertical-align: top; min-width: 12rem; }
+
+.explore-list { list-style: none; padding: 0; margin: 0 0 2rem; }
+.explore-list li {
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem;
+}
+.explore-list a { font-weight: 600; text-decoration: none; }
+.explore-list a:hover { text-decoration: underline; }
+.explore-summary {
+  flex: 1 1 22rem;
+  color: var(--text-muted);
+  font-size: .88rem;
+}
+
+.tier-chip {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  padding: .05rem .4rem;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
+}
+
+.muted { color: var(--text-faint); }
+.small { font-size: .85rem; }

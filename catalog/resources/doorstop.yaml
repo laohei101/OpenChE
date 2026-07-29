@@ -1,0 +1,45 @@
+# Canonical catalog record. Edit this, not the generated views.
+schema_version: 1
+slug: doorstop
+name: Doorstop
+kind: library
+canonical_url: https://doorstop.readthedocs.io
+summary: Requirements management in version-controlled text with automatic traceability matrices; requirements
+  review becomes code review
+domains:
+- general-engineering
+- medical-engineering
+categories:
+- project-management
+- quality-and-risk
+audiences:
+- student
+- researcher
+- industry
+access:
+  model: unknown
+  free_tier: true
+  notes: The legacy list guaranteed the resource is free to use, but the access model was never recorded.
+    Needs confirmation.
+license:
+  spdx: UNKNOWN
+  source: unknown
+  notes: Not recorded in the legacy list. Confirm from the project before promoting this record above
+    verification tier 1.
+maturity: unknown
+maintenance_status: unknown
+verification:
+  tier: 0
+  status: submitted
+  notes:
+  - Imported from the legacy Markdown list; no field has been independently confirmed.
+  - 'Merged duplicate record ''traceability-with-plain-git-doorstop'' (same canonical URL). Its description
+    was: Requirements management in version-controlled text files, with automated traceability matrices.
+    Auditable and mergeable'
+link_status: unknown
+source_list: awesome-general-engineering
+source_section: Project & Requirements Management
+tags:
+- requirements
+languages:
+- python

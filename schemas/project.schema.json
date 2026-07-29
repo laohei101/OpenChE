@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenChemE/schemas/project.schema.json",
+  "title": "OpenChemE guided project record",
+  "description": "A guided, portfolio-quality engineering project. Spec section 9.2. Every project must state what it proves, how to check it is right, and what it does not establish.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "schema_version", "slug", "title", "problem_statement", "domains",
+    "audiences", "difficulty", "estimated_hours", "cost", "requirements",
+    "prerequisites", "learning_outcomes", "milestones", "validation",
+    "deliverables", "safety_level", "license", "verification"
+  ],
+
+  "properties": {
+    "schema_version": { "const": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64 },
+    "title": { "type": "string", "minLength": 5, "maxLength": 140 },
+
+    "problem_statement": {
+      "type": "string", "minLength": 40, "maxLength": 1200,
+      "description": "The engineering question, phrased so the answer is checkable. Not 'learn about heat exchangers'."
+    },
+
+    "domains": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "enum": [
+          "chemical-engineering", "process-systems-engineering", "chemoinformatics",
+          "bioengineering", "medical-engineering", "general-engineering",
+          "sustainability", "electrochemistry", "materials", "energy"
+        ]
+      }
+    },
+
+    "audiences": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["student", "researcher", "industry", "educator"] }
+    },
+
+    "difficulty": { "enum": ["beginner", "intermediate", "advanced"] },
+
+    "estimated_hours": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "number", "exclusiveMinimum": 0 },
+        "max": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "max"],
+      "properties": {
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "max": { "type": "number", "minimum": 0 },
+        "notes": { "type": "string", "maxLength": 300 }
+      },
+      "description": "Hard cost to complete. Most projects should be 0."
+    },
+
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "software": { "type": "array", "items": { "type": "string", "maxLength": 120 } },
+        "hardware": { "type": "array", "items": { "type": "string", "maxLength": 120 } },
+        "resources": {
+          "type": "array", "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "description": "Catalog resource slugs. Validated as internal references."
+        },
+        "datasets": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" } }
+      }
+    },
+
+    "prerequisites": { "type": "array", "minItems": 1, "items": { "type": "string", "maxLength": 300 } },
+    "learning_outcomes": { "type": "array", "minItems": 1, "items": { "type": "string", "maxLength": 300 } },
+    "engineering_concepts": { "type": "array", "items": { "type": "string", "maxLength": 120 } },
+
+    "starter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "template_path": { "type": "string", "maxLength": 200 },
+        "repository_url": { "type": "string" },
+        "input_data": { "type": "string", "maxLength": 300 }
+      }
+    },
+
+    "milestones": {
+      "type": "array", "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "outcome"],
+        "properties": {
+          "title": { "type": "string", "maxLength": 160 },
+          "outcome": { "type": "string", "maxLength": 500 },
+          "estimated_hours": { "type": "number", "exclusiveMinimum": 0 }
+        }
+      }
+    },
+
+    "expected_outputs": { "type": "array", "items": { "type": "string", "maxLength": 300 } },
+
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checks"],
+      "description": "How the learner knows the answer is right. A project without this is a tutorial, not engineering.",
+      "properties": {
+        "checks": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["description", "method"],
+            "properties": {
+              "description": { "type": "string", "maxLength": 400 },
+              "method": { "enum": ["hand-calculation", "analytical-limit", "published-benchmark", "independent-implementation", "conservation-law", "unit-consistency", "regression-test"] },
+              "tolerance": { "type": "string", "maxLength": 120 },
+              "reference": { "type": "string", "maxLength": 400 }
+            }
+          }
+        },
+        "known_limitations": { "type": "array", "items": { "type": "string", "maxLength": 400 } }
+      }
+    },
+
+    "safety_level": {
+      "description": "physical-none means purely computational. Anything involving apparatus needs a documented risk assessment.",
+      "enum": ["physical-none", "physical-low", "physical-requires-supervision"]
+    },
+
+    "deliverables": { "type": "array", "minItems": 1, "items": { "type": "string", "maxLength": 300 } },
+    "report_structure": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "portfolio_readme_sections": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+
+    "resume_bullets": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 300 },
+      "description": "Must state exactly what was built and measured. No inflated claims — spec section 9.4."
+    },
+
+    "extensions": { "type": "array", "items": { "type": "string", "maxLength": 300 } },
+
+    "rubric": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion", "weight"],
+        "properties": {
+          "criterion": { "type": "string", "maxLength": 200 },
+          "weight": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+          "excellent": { "type": "string", "maxLength": 400 }
+        }
+      }
+    },
+
+    "license": { "type": "string", "maxLength": 60 },
+    "reviewer": { "type": "string", "maxLength": 120 },
+
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tier", "status"],
+      "properties": {
+        "tier": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "status": { "enum": ["draft", "reviewed", "run-end-to-end", "classroom-tested"] },
+        "checked_at": { "type": "string", "format": "date" },
+        "checked_by": { "type": "string", "maxLength": 120 },
+        "notes": { "type": "array", "items": { "type": "string", "maxLength": 400 } }
+      }
+    },
+
+    "tags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9+#.-]*$" } }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenChemE/schemas/resource.schema.json",
+  "title": "OpenChemE resource record",
+  "description": "One curated resource. This is the single source of truth: the Markdown lists, the website search index, and the resource detail pages are all generated from these files. Never edit a generated view by hand.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "schema_version",
+    "slug",
+    "name",
+    "kind",
+    "canonical_url",
+    "summary",
+    "domains",
+    "categories",
+    "audiences",
+    "access",
+    "license",
+    "maturity",
+    "maintenance_status",
+    "verification",
+    "tags"
+  ],
+
+  "properties": {
+    "schema_version": { "const": 1 },
+
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Stable identifier. Becomes the detail-page URL, so changing it breaks links.",
+      "minLength": 2,
+      "maxLength": 64
+    },
+
+    "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+
+    "kind": {
+      "description": "Controlled vocabulary, spec section 17.2.",
+      "enum": [
+        "software", "library", "simulator", "dataset", "benchmark", "model",
+        "flowsheet", "template", "workflow", "course", "book", "tutorial",
+        "standard", "regulatory-source", "community", "hardware", "calculator",
+        "article", "api"
+      ]
+    },
+
+    "canonical_url": { "type": "string", "format": "uri", "pattern": "^https?://" },
+    "repository_url": { "type": "string", "format": "uri", "pattern": "^https?://" },
+    "docs_url": { "type": "string", "format": "uri", "pattern": "^https?://" },
+    "download_url": { "type": "string", "format": "uri", "pattern": "^https?://" },
+
+    "summary": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 400,
+      "description": "What it does, in the contributor's own words. Not marketing copy, not copied from the project's site."
+    },
+
+    "domains": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "enum": [
+          "chemical-engineering", "process-systems-engineering", "chemoinformatics",
+          "bioengineering", "medical-engineering", "general-engineering",
+          "sustainability", "electrochemistry", "materials", "energy"
+        ]
+      }
+    },
+
+    "categories": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "description": "Free-ish but validated against catalog/taxonomies/categories.yaml."
+    },
+
+    "audiences": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["student", "researcher", "industry", "educator"] }
+    },
+
+    "languages": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9+#.-]*$" },
+      "$comment": "Permissive on purpose: c++, c#, vb-dotnet are all real language names."
+    },
+
+    "platforms": {
+      "type": "array", "uniqueItems": true,
+      "items": { "enum": ["windows", "macos", "linux", "web", "docker", "cross-platform", "unknown"] }
+    },
+
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model"],
+      "properties": {
+        "model": {
+          "description": "How a reader actually gets to use it. 'unknown' is a legitimate, honest value.",
+          "enum": [
+            "open-source",
+            "open-source-with-supporter-editions",
+            "free-tier",
+            "free-registration-required",
+            "free-for-academic-use",
+            "public-domain",
+            "paywalled",
+            "unknown"
+          ]
+        },
+        "open_source_release": { "type": "boolean" },
+        "free_tier": { "type": "boolean" },
+        "paid_features_exist": { "type": "boolean" },
+        "registration_required": { "type": "boolean" },
+        "notes": { "type": "string", "maxLength": 500 }
+      }
+    },
+
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx"],
+      "properties": {
+        "spdx": {
+          "type": "string",
+          "description": "SPDX identifier, or 'UNKNOWN' when it has not been confirmed. Never guess a licence: a wrong licence is worse than an absent one.",
+          "minLength": 3,
+          "maxLength": 80
+        },
+        "source": { "enum": ["official", "repository", "community-reported", "unknown"] },
+        "notes": { "type": "string", "maxLength": 500 }
+      }
+    },
+
+    "maturity": { "enum": ["experimental", "emerging", "established", "mature", "archived", "unknown"] },
+
+    "maintenance_status": {
+      "enum": ["active", "maintained", "low-activity", "dormant", "archived", "unknown"]
+    },
+
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tier", "status"],
+      "properties": {
+        "tier": {
+          "type": "integer", "minimum": 0, "maximum": 4,
+          "description": "0 submitted, 1 link checked, 2 metadata checked, 3 quick start reproduced, 4 domain validated. See docs/verification-methodology.md. A tier above 0 REQUIRES evidence entries and a checked_at date."
+        },
+        "status": {
+          "enum": [
+            "submitted", "link-checked", "metadata-verified",
+            "quickstart-reproduced", "domain-validated", "needs-recheck"
+          ]
+        },
+        "checked_at": { "type": "string", "format": "date" },
+        "checked_by": { "type": "string", "maxLength": 120 },
+        "notes": { "type": "array", "items": { "type": "string", "maxLength": 400 } }
+      }
+    },
+
+    "link_status": {
+      "description": "Result of the last automated link check. 'blocked' is not 'dead' — see spec section 6.4.",
+      "enum": ["ok", "redirected", "blocked", "rate-limited", "auth-required", "manual-check-needed", "dead", "unknown"]
+    },
+
+    "quickstarts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "url"],
+        "properties": {
+          "title": { "type": "string", "maxLength": 160 },
+          "url": { "type": "string" },
+          "verified_on": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "product_version": { "type": "string", "maxLength": 40 },
+              "date": { "type": "string", "format": "date" }
+            }
+          }
+        }
+      }
+    },
+
+    "install": { "type": "array", "items": { "type": "string", "maxLength": 300 } },
+    "launch": { "type": "array", "items": { "type": "string", "maxLength": 300 } },
+
+    "use_when": { "type": "array", "items": { "type": "string", "maxLength": 300 } },
+    "avoid_when": { "type": "array", "items": { "type": "string", "maxLength": 300 } },
+
+    "limitations": { "type": "array", "items": { "type": "string", "maxLength": 400 } },
+
+    "alternatives": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "description": "Slugs of other catalog records. Validated as internal references."
+    },
+
+    "integrations": { "type": "array", "uniqueItems": true, "items": { "type": "string", "maxLength": 40 } },
+
+    "evidence": {
+      "type": "array",
+      "description": "Where the metadata claims came from. Required for verification tier 1 and above.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "url"],
+        "properties": {
+          "type": {
+            "enum": [
+              "official-site", "official-release-page", "official-docs", "repository",
+              "package-registry", "publication", "community-report", "other"
+            ]
+          },
+          "url": { "type": "string" },
+          "retrieved_at": { "type": "string", "format": "date" },
+          "note": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+
+    "citation": { "type": "string", "maxLength": 600 },
+
+    "affiliation_disclosure": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Set when the record's contributor is affiliated with the project. Affiliation is fine; hiding it is not."
+    },
+
+    "archived_replacement": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+
+    "related_projects": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" } },
+    "related_datasets": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" } },
+
+    "source_list": {
+      "type": "string",
+      "description": "Which legacy Markdown list this record was imported from. Provenance for the migration; safe to drop once hand-curated.",
+      "maxLength": 80
+    },
+    "source_section": { "type": "string", "maxLength": 120 },
+
+    "tags": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9+#.-]*$", "maxLength": 40 }
+    }
+  },
+
+  "allOf": [
+    {
+      "$comment": "A verification claim above tier 0 must carry a date and evidence. This is the schema-level guard against the failure mode the spec calls out: displaying 'verified' without saying what was verified.",
+      "if": {
+        "properties": { "verification": { "properties": { "tier": { "minimum": 1 } }, "required": ["tier"] } },
+        "required": ["verification"]
+      },
+      "then": {
+        "properties": {
+          "verification": { "required": ["tier", "status", "checked_at", "checked_by"] },
+          "evidence": { "minItems": 1 }
+        },
+        "required": ["evidence"]
+      }
+    },
+    {
+      "$comment": "An archived resource should point somewhere useful if a successor exists.",
+      "if": { "properties": { "maintenance_status": { "const": "archived" } }, "required": ["maintenance_status"] },
+      "then": { "properties": { "limitations": { "minItems": 1 } }, "required": ["limitations"] }
+    }
+  ]
+}

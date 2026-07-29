@@ -1,0 +1,72 @@
+# Dependency review and code scanning.
+#
+# Everything in this repository is static content plus local build scripts —
+# there is no server and no user input — so the realistic risks are a malicious
+# dependency and a workflow that can be abused from a fork. Both are covered.
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    # Only meaningful on a PR: it diffs the manifests against the base.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/dependency-review-action@3b139cfc5fae8b618d3eae3675e383bb1769c019 # v4.5.0
+        with:
+          fail-on-severity: high
+
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: github/codeql-action/init@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+        with:
+          language: ${{ matrix.language }}
+      - uses: github/codeql-action/analyze@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+
+  workflow-hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Third-party actions must be pinned to a commit SHA
+        run: |
+          # A moving tag can be repointed at different code; a SHA cannot.
+          # actions/* and github/* are first-party but we pin them too.
+          bad=$(grep -rhoE '^\s*(- )?uses: [^ ]+' .github/workflows/ \
+                | grep -vE '@[0-9a-f]{40}' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Unpinned action reference(s):"
+            echo "$bad"
+            exit 1
+          fi
+          echo "All action references are pinned to a full commit SHA."
+
+      - name: No untrusted input interpolated into run blocks
+        run: |
+          # ${{ github.event.*.title }} and friends are attacker-controlled and
+          # must reach a shell through env:, never through direct interpolation.
+          if grep -rnE '\$\{\{\s*github\.event\.(issue|pull_request|comment)\.[a-z_]*(title|body)' \
+               .github/workflows/ ; then
+            echo "::error::Untrusted input interpolated directly into a workflow"
+            exit 1
+          fi
+          echo "No untrusted interpolation found."

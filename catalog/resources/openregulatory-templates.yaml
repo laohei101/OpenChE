@@ -1,0 +1,44 @@
+# Canonical catalog record. Edit this, not the generated views.
+schema_version: 1
+slug: openregulatory-templates
+name: openregulatory templates
+kind: library
+canonical_url: https://github.com/openregulatory/templates
+summary: 'Markdown templates for the full technical documentation set: risk management file, software
+  architecture, verification plans, usability engineering'
+domains:
+- medical-engineering
+categories:
+- quality-and-risk
+- device-design
+audiences:
+- student
+- researcher
+- industry
+access:
+  model: unknown
+  free_tier: true
+  notes: The legacy list guaranteed the resource is free to use, but the access model was never recorded.
+    Needs confirmation.
+license:
+  spdx: UNKNOWN
+  source: unknown
+  notes: Not recorded in the legacy list. Confirm from the project before promoting this record above
+    verification tier 1.
+maturity: unknown
+maintenance_status: unknown
+verification:
+  tier: 0
+  status: submitted
+  notes:
+  - Imported from the legacy Markdown list; no field has been independently confirmed.
+  - 'Merged duplicate record ''gitlab-github-based-dhf-templates-medical-device-dhf'' (same canonical
+    URL). Its description was: Free, editable templates for design history files, SOPs, and technical
+    documentation aligned to ISO 13485 and the EU MDR'
+link_status: unknown
+source_list: awesome-medical-engineering
+source_section: Quality Systems & Risk Management
+tags:
+- templates
+- free
+- regulatory
