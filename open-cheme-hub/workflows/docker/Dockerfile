@@ -42,7 +42,7 @@ FROM mambaorg/micromamba:1.5.8-jammy
 LABEL org.opencontainers.image.title="chem-toolkit"
 LABEL org.opencontainers.image.description="RDKit, Open Babel, Cantera, and process engineering libraries"
 LABEL org.opencontainers.image.version="1.2.0"
-LABEL org.opencontainers.image.source="https://github.com/open-cheme-hub/workflows"
+LABEL org.opencontainers.image.source="https://github.com/OpenChemE/workflows"
 LABEL org.opencontainers.image.licenses="MIT"
 
 # ---------------------------------------------------------------------------

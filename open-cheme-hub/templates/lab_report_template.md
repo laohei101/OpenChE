@@ -327,7 +327,7 @@ One complete worked calculation from raw reading to final U, with units carried 
 ```python
 # Include your script, or link the repository and give the commit hash so the
 # exact version that produced these numbers can be recovered.
-# See: https://github.com/open-cheme-hub/templates
+# See: https://github.com/OpenChemE/templates
 ```
 
 # Appendix D — Risk assessment

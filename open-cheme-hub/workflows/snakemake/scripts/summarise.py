@@ -58,7 +58,7 @@ def main() -> None:
         fh.write(f"""# Conformer generation summary
 
 Generated {dt.datetime.now().strftime('%Y-%m-%d %H:%M')} by
-[conformer_generation_dft](https://github.com/open-cheme-hub/workflows).
+[conformer_generation_dft](https://github.com/OpenChemE/workflows).
 
 ## What was run
 

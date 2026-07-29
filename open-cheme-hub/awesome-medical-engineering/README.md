@@ -13,7 +13,7 @@ cleared or approved medical device. Software used in a device or in patient care
 (IEC 62304, ISO 14971, and the relevant national regulation) that no library gives you for free.
 
 **Contributions welcome** — see the
-[organisation contributing guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md).
+[organisation contributing guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md).
 
 ---
 
@@ -153,9 +153,9 @@ official page, freely available guidance, or open summaries.
 
 ## Related Lists
 
-- [awesome-bioengineering](https://github.com/open-cheme-hub/awesome-bioengineering) — Biomaterials and tissue engineering.
-- [awesome-general-engineering](https://github.com/open-cheme-hub/awesome-general-engineering) — CAD, controls, and embedded systems for device hardware.
-- [awesome-chemoinformatics](https://github.com/open-cheme-hub/awesome-chemoinformatics) — Drug-device combination products and molecular modelling.
+- [awesome-bioengineering](https://github.com/OpenChemE/awesome-bioengineering) — Biomaterials and tissue engineering.
+- [awesome-general-engineering](https://github.com/OpenChemE/awesome-general-engineering) — CAD, controls, and embedded systems for device hardware.
+- [awesome-chemoinformatics](https://github.com/OpenChemE/awesome-chemoinformatics) — Drug-device combination products and molecular modelling.
 
 ---
 

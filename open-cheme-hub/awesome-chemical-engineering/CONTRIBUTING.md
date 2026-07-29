@@ -1,6 +1,6 @@
 # Contributing to Awesome Chemical Engineering
 
-The [organisation-wide guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md)
+The [organisation-wide guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md)
 applies here. This file covers what's specific to this list.
 
 ## The one-line format

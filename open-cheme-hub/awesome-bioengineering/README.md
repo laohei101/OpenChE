@@ -12,7 +12,7 @@ half you didn't train in.
 Everything here is free to use.
 
 **Contributions welcome** — see the
-[organisation contributing guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md).
+[organisation contributing guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md).
 
 ---
 
@@ -138,9 +138,9 @@ Everything here is free to use.
 
 ## Related Lists
 
-- [awesome-chemical-engineering](https://github.com/open-cheme-hub/awesome-chemical-engineering) — Reactor design, mass transfer, and downstream unit operations.
-- [awesome-chemoinformatics](https://github.com/open-cheme-hub/awesome-chemoinformatics) — Molecular modelling and enzyme substrate design.
-- [awesome-medical-engineering](https://github.com/open-cheme-hub/awesome-medical-engineering) — Where biomaterials meet regulatory pathways.
+- [awesome-chemical-engineering](https://github.com/OpenChemE/awesome-chemical-engineering) — Reactor design, mass transfer, and downstream unit operations.
+- [awesome-chemoinformatics](https://github.com/OpenChemE/awesome-chemoinformatics) — Molecular modelling and enzyme substrate design.
+- [awesome-medical-engineering](https://github.com/OpenChemE/awesome-medical-engineering) — Where biomaterials meet regulatory pathways.
 
 ---
 

@@ -39,7 +39,7 @@ body:
       description: Exact commands or notebook cells. A minimal case beats a long description.
       render: shell
       placeholder: |
-        git clone https://github.com/open-cheme-hub/templates
+        git clone https://github.com/OpenChemE/templates
         cd templates
         python pid_tuning.py --method ziegler-nichols
     validations:

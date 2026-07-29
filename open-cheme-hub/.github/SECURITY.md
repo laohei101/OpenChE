@@ -14,7 +14,7 @@ don't run a service, and we don't handle user data. The realistic risks are ther
 
 ## Reporting
 
-Email **security@open-cheme-hub.org**, or use GitHub's private vulnerability reporting on the
+Email **yu.dai@mail.utoronto.ca**, or use GitHub's private vulnerability reporting on the
 affected repository (Security → Report a vulnerability).
 
 Please include:

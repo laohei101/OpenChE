@@ -66,5 +66,5 @@ templates, compare against a hand calculation or a textbook example and say whic
 
 ---
 
-- [ ] I've read [CONTRIBUTING.md](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md)
+- [ ] I've read [CONTRIBUTING.md](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md)
 - [ ] I agree to license my contribution under **CC BY 4.0** (prose) / **MIT** (code)

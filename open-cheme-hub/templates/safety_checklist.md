@@ -284,6 +284,6 @@ was available is a weak action, and reviewers should say so:
 
 ---
 
-*Template maintained at [open-cheme-hub/templates](https://github.com/open-cheme-hub/templates).
+*Template maintained at [open-cheme-hub/templates](https://github.com/OpenChemE/templates).
 Provided as-is under MIT licence, with no warranty of fitness for any purpose. Adapt it to your
 site's procedures; where they differ, your site's procedures win.*

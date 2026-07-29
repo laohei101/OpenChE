@@ -590,42 +590,42 @@ DATA = {
          "Learning Resources", ["course", "free"]),
     ],
     TP: [
-        ("mass_balance_notebook.ipynb", "https://github.com/open-cheme-hub/templates/blob/main/mass_balance_notebook.ipynb",
+        ("mass_balance_notebook.ipynb", "https://github.com/OpenChemE/templates/blob/main/mass_balance_notebook.ipynb",
          "Steady-state material balances from a hand-checkable mixer to a three-unit flowsheet with recycle, plus a reaction example.",
          "Calculations", ["jupyter", "python", "numpy", "balances"]),
-        ("reactor_design_skeleton.py", "https://github.com/open-cheme-hub/templates/blob/main/reactor_design_skeleton.py",
+        ("reactor_design_skeleton.py", "https://github.com/OpenChemE/templates/blob/main/reactor_design_skeleton.py",
          "CSTR and PFR sizing for a liquid-phase reaction, with CSTRs-in-series comparison and a Levenspiel plot.",
          "Calculations", ["python", "scipy", "reactor-design"]),
-        ("pid_tuning.py", "https://github.com/open-cheme-hub/templates/blob/main/pid_tuning.py",
+        ("pid_tuning.py", "https://github.com/OpenChemE/templates/blob/main/pid_tuning.py",
          "FOPDT identification from a step test, then Ziegler-Nichols, Cohen-Coon, AMIGO, and IMC tuning compared on one loop.",
          "Calculations", ["python", "control", "pid"]),
-        ("unit_conversions.py", "https://github.com/open-cheme-hub/templates/blob/main/unit_conversions.py",
+        ("unit_conversions.py", "https://github.com/OpenChemE/templates/blob/main/unit_conversions.py",
          "Dependency-free conversions for flows, pressures, temperatures, viscosities, and duty, plus dimensionless groups.",
          "Calculations", ["python", "units", "no-dependencies"]),
-        ("lab_report_template.md", "https://github.com/open-cheme-hub/templates/blob/main/lab_report_template.md",
+        ("lab_report_template.md", "https://github.com/OpenChemE/templates/blob/main/lab_report_template.md",
          "Undergraduate lab report with YAML front matter, section guidance, and a worked uncertainty analysis.",
          "Documents", ["markdown", "pandoc", "report"]),
-        ("eln_experiment_template.md", "https://github.com/open-cheme-hub/templates/blob/main/eln_experiment_template.md",
+        ("eln_experiment_template.md", "https://github.com/OpenChemE/templates/blob/main/eln_experiment_template.md",
          "Electronic lab notebook entry: hypothesis, materials with lot numbers, execution log, deviations, amendments.",
          "Documents", ["markdown", "eln", "reproducibility"]),
-        ("safety_checklist.md", "https://github.com/open-cheme-hub/templates/blob/main/safety_checklist.md",
+        ("safety_checklist.md", "https://github.com/OpenChemE/templates/blob/main/safety_checklist.md",
          "HAZOP-style guide-word matrix and prompt list, with a laboratory and pilot-scale supplement.",
          "Documents", ["markdown", "safety", "hazop"]),
-        ("aspen_simulation_tips.md", "https://github.com/open-cheme-hub/templates/blob/main/aspen_simulation_tips.md",
+        ("aspen_simulation_tips.md", "https://github.com/OpenChemE/templates/blob/main/aspen_simulation_tips.md",
          "How to version-control Aspen and HYSYS work so simulation changes become reviewable diffs.",
          "Simulation", ["aspen", "git", "version-control"]),
-        ("dwsim_simulation.dwxml", "https://github.com/open-cheme-hub/templates/blob/main/dwsim_simulation.dwxml",
+        ("dwsim_simulation.dwxml", "https://github.com/OpenChemE/templates/blob/main/dwsim_simulation.dwxml",
          "Annotated DWSIM mixer and heater flowsheet in XML, showing why an open format is reviewable and a binary one is not.",
          "Simulation", ["dwsim", "xml", "flowsheet"]),
     ],
     WF: [
-        ("conformer_generation_dft", "https://github.com/open-cheme-hub/workflows/tree/main/snakemake",
+        ("conformer_generation_dft", "https://github.com/OpenChemE/workflows/tree/main/snakemake",
          "Snakemake pipeline: SMILES to standardised, MMFF-optimised, RMSD-pruned conformer ensembles with ORCA inputs written.",
          "Pipelines", ["snakemake", "rdkit", "conformers", "reproducibility"]),
-        ("render_mol.yml", "https://github.com/open-cheme-hub/workflows/blob/main/github_actions/render_mol.yml",
+        ("render_mol.yml", "https://github.com/OpenChemE/workflows/blob/main/github_actions/render_mol.yml",
          "GitHub Action rendering changed .mol/.sdf/.xyz files to SVG and validating them with RDKit on every pull request.",
          "CI Automation", ["github-actions", "openbabel", "rdkit", "ci"]),
-        ("chem-toolkit Docker image", "https://github.com/open-cheme-hub/workflows/tree/main/docker",
+        ("chem-toolkit Docker image", "https://github.com/OpenChemE/workflows/tree/main/docker",
          "Pinned container with RDKit, Open Babel, Cantera, CoolProp, the process engineering stack, Pyomo, and JupyterLab.",
          "Containers", ["docker", "rdkit", "cantera", "coolprop", "reproducibility"]),
     ],
@@ -643,12 +643,22 @@ for category, entries in DATA.items():
             "tags": tags,
         })
 
-out = pathlib.Path(
-    "/home/user/OpenChemE/open-cheme-hub/hub-website/docs/assets/data/resources.json"
-)
-out.write_text(json.dumps(records, indent=2, ensure_ascii=False) + "\n")
+# Written to both copies of the site: the canonical one at the repository root
+# (what Vercel serves) and the docs/ mirror (what GitHub Pages would serve).
+# Paths are relative to this script so the repository can live anywhere.
+here = pathlib.Path(__file__).resolve().parent
+targets = [
+    here / "docs" / "assets" / "data" / "resources.json",
+    here.parent.parent / "public" / "assets" / "data" / "resources.json",
+]
 
-print(f"wrote {out}")
+payload = json.dumps(records, indent=2, ensure_ascii=False) + "\n"
+for out in targets:
+    if not out.parent.is_dir():
+        print(f"skipped (no such directory): {out}")
+        continue
+    out.write_text(payload)
+    print(f"wrote {out}")
 print(f"total records: {len(records)}")
 for cat in DATA:
     print(f"  {cat:24s} {len(DATA[cat]):3d}")

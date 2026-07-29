@@ -59,7 +59,7 @@ jobs:
     # on apt every run. Pinned by digest, not by tag: a tag can be repointed at
     # different content, a digest cannot.
     container:
-      image: ghcr.io/open-cheme-hub/chem-toolkit:1.2.0
+      image: ghcr.io/opencheme/chem-toolkit:1.2.0
 
     steps:
       - name: Check out repository

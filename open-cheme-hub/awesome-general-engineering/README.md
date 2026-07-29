@@ -10,7 +10,7 @@ requirements tracker, the units package that stops you from crashing a spacecraf
 Everything here is free to use.
 
 **Contributions welcome** — see the
-[organisation contributing guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md).
+[organisation contributing guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md).
 
 ---
 
@@ -150,9 +150,9 @@ Everything here is free to use.
 
 ## Related Lists
 
-- [awesome-chemical-engineering](https://github.com/open-cheme-hub/awesome-chemical-engineering) — Process-specific simulation and control.
-- [awesome-medical-engineering](https://github.com/open-cheme-hub/awesome-medical-engineering) — Where these tools meet regulated device development.
-- [templates](https://github.com/open-cheme-hub/templates) — PID tuning, unit conversion, and report starting points.
+- [awesome-chemical-engineering](https://github.com/OpenChemE/awesome-chemical-engineering) — Process-specific simulation and control.
+- [awesome-medical-engineering](https://github.com/OpenChemE/awesome-medical-engineering) — Where these tools meet regulated device development.
+- [templates](https://github.com/OpenChemE/templates) — PID tuning, unit conversion, and report starting points.
 
 ---
 

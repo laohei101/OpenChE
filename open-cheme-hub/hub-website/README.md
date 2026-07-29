@@ -1,10 +1,15 @@
 # hub-website
 
-**The static site at [open-cheme-hub.github.io](https://open-cheme-hub.github.io) — entry point,
-orientation, and search across every list.**
+**The Open ChemE Hub site: entry point, orientation, and search across every list.**
 
-Jekyll, served by GitHub Pages from the `docs/` folder. No build step of our own, no npm, no
-theme gem. Editing a Markdown file and pushing is the whole deployment process.
+Plain static HTML, CSS, and JavaScript. **No build step, no framework, no dependencies.** Open
+`index.html` in a browser and it works — which is also why it deploys anywhere without
+configuration.
+
+> **The canonical copy lives at the repository root**, in `/public`, because that is what the
+> Vercel deployment serves. This `docs/` directory is a mirror kept in step by `./sync.sh`, so
+> that if `hub-website` is ever published as its own repository, GitHub Pages serves identical
+> content. **Edit `/public`, then run `./sync.sh`** — don't edit `docs/` directly.
 
 ---
 
@@ -12,143 +17,134 @@ theme gem. Editing a Markdown file and pushing is the whole deployment process.
 
 ```
 hub-website/
-├── README.md              # this file
-├── build_index.py         # regenerates the search index from a compact source list
-└── docs/                  # everything GitHub Pages serves
-    ├── _config.yml        # site settings, navigation, and the list/tool card data
-    ├── index.md           # homepage (uses the `home` layout)
-    ├── get-started.md     # three paths: students, researchers, industry
-    ├── search.md          # client-side search page
-    ├── Gemfile            # local preview only; Pages ignores it
-    ├── _layouts/
-    │   ├── default.html   # shell: header, footer, theme toggle, mobile nav
-    │   └── home.html      # homepage sections, built from _config.yml data
+├── README.md          # this file
+├── sync.sh            # copies /public -> docs/
+├── build_index.py     # regenerates the search index from a compact source list
+└── docs/              # mirror of /public, for GitHub Pages
+    ├── .nojekyll      # serve these files as-is; do not run Jekyll over them
+    ├── index.html     # hero, list cards, tool cards, personas, contribute
+    ├── get-started.html
+    ├── search.html
     └── assets/
-        ├── css/style.css  # hand-written, ~700 lines, light and dark
-        ├── js/search.js   # dependency-free weighted token search
-        └── data/resources.json   # the search index
+        ├── css/style.css        # ~700 lines, light and dark, no framework
+        ├── js/site.js           # theme toggle, mobile nav
+        ├── js/search.js         # weighted-token search over the index
+        └── data/resources.json  # the search index, 199 records
 ```
 
 ## Local preview
 
 ```bash
-cd docs
-bundle install                            # first time only
-bundle exec jekyll serve --livereload
-# http://localhost:4000
+cd docs        # or /public — they are the same files
+python3 -m http.server 8000
+# http://localhost:8000
 ```
 
-The `github-pages` gem pins Jekyll and every plugin to exactly what GitHub Pages runs, so a
-local build and the deployed build agree. Installing a newer standalone Jekyll is the usual
-reason a site works locally and renders differently in production.
-
-No Ruby? Most changes can be checked without it — `assets/css/style.css` and
-`assets/js/search.js` are plain files, and the Markdown pages render close enough in any
-previewer. Only Liquid template changes really need a local build.
+Any static server works. **Don't open the files with `file://`** — `search.js` fetches
+`resources.json`, and browsers block `fetch` on `file://` origins, so search will appear broken
+when nothing is actually wrong.
 
 ## Deploying
 
-**Settings → Pages → Source: "Deploy from a branch", branch `main`, folder `/docs`.**
+### Vercel (current)
 
-Then set `url` and `baseurl` in `_config.yml` for where it actually lives:
+Nothing to configure. `vercel.json` at the repository root sets `outputDirectory` to `public`,
+and Vercel serves it as static files with no build command. Pushing to the default branch
+deploys.
 
-| Deployment | `url` | `baseurl` |
-| --- | --- | --- |
-| Org site at `open-cheme-hub.github.io` | `https://open-cheme-hub.github.io` | `""` |
-| Project site at `user.github.io/hub-website` | `https://user.github.io` | `/hub-website` |
-| Custom domain | `https://yourdomain.org` | `""` |
+If a deployment 404s, the cause is almost always the **Root Directory** setting in the Vercel
+project pointing somewhere other than the repository root. Check
+*Project → Settings → General → Root Directory* — it should be empty.
 
-Getting `baseurl` wrong is the single most common Pages problem: the page renders but every
-stylesheet, script, and internal link 404s. Every URL in the layouts goes through
-`relative_url` so that one setting fixes all of them at once, and `search.js` resolves the
-index path relative to its own `src` for the same reason.
+### GitHub Pages
 
-For a custom domain, add a `CNAME` file containing the bare domain to `docs/`.
+*Settings → Pages → Source: "Deploy from a branch", branch `main`, folder `/docs`.*
 
-## Adding or changing content
+The `.nojekyll` file matters: without it, Pages runs the content through Jekyll, which ignores
+directories beginning with an underscore and can silently mangle things. Static HTML plus
+`.nojekyll` is the most predictable combination.
 
-### A new page
+### Anywhere else
 
-Create `docs/whatever.md` with front matter:
+Netlify, Cloudflare Pages, S3, nginx, a university web directory — copy `/public` and serve it.
+Every link is root-relative (`/assets/...`, `/search.html`), so the site expects to live at a
+domain root. To serve it from a subpath, change those to relative paths (`assets/...`).
 
-```yaml
----
-layout: default
-title: Whatever
-permalink: /whatever/
-description: One sentence — this becomes the meta description and the search snippet.
----
-```
+## Editing
 
-Add it to the `nav:` list in `_config.yml` if it belongs in the header.
+**Content** is in the three HTML files. There is no templating, so the header and footer are
+duplicated across them — that is the deliberate cost of having no build step. If you change the
+navigation, change it in all three.
 
-### A new list or tool card
-
-Both homepage card rows are generated from `_config.yml`. Add an entry under `lists:` or
-`tools:` and the card, the footer link, and the search filter follow. Nothing in the HTML
-needs touching.
-
-### The search index
-
-`docs/assets/data/resources.json` is the site's own copy of the lists — about 200 of the most
-reached-for entries out of the 460-odd across all five. Regenerate it with:
+**The search index** is `assets/data/resources.json`, regenerated by:
 
 ```bash
-python3 build_index.py
+python3 build_index.py     # writes docs/assets/data/resources.json
+cp docs/assets/data/resources.json ../../public/assets/data/   # and back to canonical
 ```
 
-Entries live in `build_index.py` as one-line tuples, `(name, url, description, section, tags)`,
-which keeps adding a resource to one line instead of six and validates for duplicates and
-malformed URLs on the way out. Editing the JSON by hand works too — just keep it valid, because
-a trailing comma silently breaks search for everyone.
+Entries live in `build_index.py` as one-line tuples — `(name, url, description, section, tags)` —
+so adding a resource is one line, and the script checks for duplicates and malformed URLs on the
+way out. Hand-editing the JSON works too; just keep it valid, because a trailing comma silently
+breaks search for everyone.
 
-If you add a resource to a list and want it searchable immediately, add it here in the same
-pull request. Otherwise the next index refresh picks it up.
+The index holds about 200 of the ~446 entries across the five lists. Adding a resource to a list
+does not automatically add it here.
+
+**Theme colours** are CSS custom properties at the top of `style.css`. Re-theming the whole site
+means editing roughly twenty lines.
 
 ## How the search works
 
-Loading `resources.json` and scoring in the browser. Roughly 60 KB of JSON, no server, no
-tracking, and it keeps working offline once the page has loaded.
+The page loads `resources.json` (~60 KB) and scores in the browser. No server, no tracking, and
+it keeps working offline once loaded.
 
 Matching is a **weighted token score**, not fuzzy similarity: every token you type must appear
-somewhere in the record, and matches score higher in the name than in tags, higher in tags than
-in the description. For a few hundred records this gives more predictable results than a
-similarity threshold somebody would have to tune, and it never surfaces a confusing
-near-miss.
+somewhere in the record, and a match scores higher in the name than in the tags, higher in the
+tags than in the description. For a few hundred records this is more predictable than a
+similarity threshold somebody would have to tune, and it never surfaces a confusing near-miss.
 
-Also implemented: category filters, deep links (`/search/?q=cantera`), `/` to focus the box,
-`Escape` to clear, and a `<noscript>` fallback pointing at the Markdown lists, which your
-browser's own find-in-page handles perfectly well.
+Also implemented: category filters, deep links (`/search.html?q=cantera`), `/` to focus the box,
+`Escape` to clear, and a `<noscript>` block pointing at the Markdown lists, which the browser's
+own find-in-page handles perfectly well.
 
 ## Design notes
 
-**Hand-written CSS, ~700 lines.** A framework would be more code, not less, for six pages. The
-whole palette is CSS custom properties, so re-theming means editing about twenty lines at the
-top of `style.css`.
+**No external requests.** No CDN, no web fonts, no analytics, no third-party anything. System
+font stack; the favicon is an emoji in an inline SVG data URI. The root `vercel.json` sets a
+Content-Security-Policy that permits `'self'` only, so an accidental third-party include fails
+loudly in the console rather than quietly shipping.
 
-**Dark mode is first-class.** The theme comes from `prefers-color-scheme`, is overridable with
-the header toggle, persists in `localStorage`, and is applied in a tiny inline script before
-first paint so dark-mode readers never get a white flash.
+**Dark mode is first-class.** It follows `prefers-color-scheme`, is overridable with the header
+toggle, persists in `localStorage`, and is applied by a small inline script in `<head>` before
+first paint — so dark-mode readers never get a white flash.
 
-**Accessibility.** Skip link, visible focus rings, `aria-current` on the active nav item,
-live-region status on search results, and `prefers-reduced-motion` respected. Colour contrast
+**Accessibility.** Skip link, visible focus rings, `aria-current` on the active nav item, a live
+region on search status, labelled controls, and `prefers-reduced-motion` respected. Contrast
 meets WCAG AA in both themes.
 
-**No external requests.** No CDN, no web fonts, no analytics. System font stack, emoji favicon
-as an inline SVG data URI. The site loads fast on conference wifi, which is where people
-actually open it.
-
-**Wide content scrolls itself.** Tables and code blocks get their own `overflow-x`, so the page
+**Wide content scrolls itself.** Tables and code blocks carry their own `overflow-x`, so the page
 body never scrolls sideways on a phone.
+
+## Verified
+
+Checked in headless Chromium at 1280 px and 390 px:
+
+- all three pages render, no console errors, no failed requests
+- theme toggle flips `data-theme`; mobile nav opens; zero horizontal overflow at 390 px
+- search loads 199 records; `cantera` ranks Cantera first; the templates filter returns exactly 9;
+  the no-match path and `?q=` deep links both work
+- every anchor the homepage links to (`#students`, `#researchers`, `#industry`, `#educators`,
+  `#faq`) exists on the Get Started page
 
 ## Contributing
 
-See the [organisation contributing guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md).
-Copy edits and clarifications are always welcome — this site's job is to get someone from
-"a colleague mentioned this" to "I have something running" as fast as possible, and if any page
-here fails at that, say so in an issue.
+See the [organisation contributing guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md).
+Copy edits are always welcome — this site's job is to get someone from "a colleague mentioned
+this" to "I have something running" as fast as possible. If a page fails at that, say so in an
+issue.
 
 ## Licence
 
-Prose under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the layouts, CSS, and
+Prose under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the HTML, CSS, and
 JavaScript under MIT.

@@ -26,10 +26,10 @@ under five minutes to read, and most contributions take less time than that to m
 | --- | --- |
 | Add a tool, dataset, or course to a list | Edit the list's `README.md`, open a PR |
 | Report a dead link | Open a **Broken link** issue (or just fix it in a PR) |
-| Share a spreadsheet, notebook, or script others rebuild constantly | PR to [`templates`](https://github.com/open-cheme-hub/templates) |
-| Share a reproducible pipeline | PR to [`workflows`](https://github.com/open-cheme-hub/workflows) |
-| Ask "does anyone know a good tool for X?" | [Discussions → Q&A](https://github.com/orgs/open-cheme-hub/discussions) |
-| Propose a new list or a new section | [Discussions → Ideas](https://github.com/orgs/open-cheme-hub/discussions) |
+| Share a spreadsheet, notebook, or script others rebuild constantly | PR to [`templates`](https://github.com/OpenChemE/templates) |
+| Share a reproducible pipeline | PR to [`workflows`](https://github.com/OpenChemE/workflows) |
+| Ask "does anyone know a good tool for X?" | [Discussions → Q&A](https://github.com/orgs/OpenChemE/discussions) |
+| Propose a new list or a new section | [Discussions → Ideas](https://github.com/orgs/OpenChemE/discussions) |
 | Fix a typo | PR, no issue needed, merged on sight |
 
 You do not need permission to open a pull request. You do not need to open an issue first unless

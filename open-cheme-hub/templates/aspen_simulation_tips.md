@@ -337,6 +337,6 @@ usually the right call — just version-control it properly.
 
 ---
 
-*Part of [open-cheme-hub/templates](https://github.com/open-cheme-hub/templates). MIT licence.
+*Part of [open-cheme-hub/templates](https://github.com/OpenChemE/templates). MIT licence.
 Aspen Plus, Aspen HYSYS, and Aspen EDR are trademarks of Aspen Technology, Inc. This document
 is not affiliated with or endorsed by AspenTech.*

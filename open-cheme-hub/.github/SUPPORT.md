@@ -4,9 +4,9 @@
 
 | Your question | Best place |
 | --- | --- |
-| "Is there an open-source tool for X?" | [Discussions → Q&A](https://github.com/orgs/open-cheme-hub/discussions/categories/q-a) |
-| "This template throws an error" | Issue on [`templates`](https://github.com/open-cheme-hub/templates/issues) |
-| "The Snakemake workflow fails at rule Y" | Issue on [`workflows`](https://github.com/open-cheme-hub/workflows/issues) |
+| "Is there an open-source tool for X?" | [Discussions → Q&A](https://github.com/orgs/OpenChemE/discussions/categories/q-a) |
+| "This template throws an error" | Issue on [`templates`](https://github.com/OpenChemE/templates/issues) |
+| "The Snakemake workflow fails at rule Y" | Issue on [`workflows`](https://github.com/OpenChemE/workflows/issues) |
 | "This link is dead / goes somewhere else now" | Issue on the list repo, or just fix it in a PR |
 | "How do I add a resource?" | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | "Can you help debug my Aspen model?" | Not us — try [Eng-Tips](https://www.eng-tips.com/) or [r/ChemicalEngineering](https://reddit.com/r/ChemicalEngineering) |
@@ -38,3 +38,17 @@ A minimal reproducing case beats a long description almost every time.
 
 Volunteers, mostly practising engineers and researchers. Expect a reply within a week, slower
 around conference deadlines and semester starts. Nudging a quiet thread is fine.
+
+## Contact
+
+Use the public channels above wherever you can — a question answered in Discussions helps the
+next person, and an issue is the only place a bug can actually get fixed.
+
+Email **yu.dai@mail.utoronto.ca** for the things that genuinely don't belong in public:
+
+- [Code of Conduct](CODE_OF_CONDUCT.md) reports
+- [Security](SECURITY.md) disclosures — a hijacked link, malicious code, an abusable workflow
+- Anything involving someone's personal circumstances
+
+Please don't email general support questions. They'll be redirected to Discussions, which is
+slower for you than starting there.

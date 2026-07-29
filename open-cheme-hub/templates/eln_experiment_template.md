@@ -296,5 +296,5 @@ CHECKLIST BEFORE MARKING AN ENTRY COMPLETE
   [ ] Next steps have owners and dates
   [ ] Someone else could repeat this from the entry alone
 
-Template maintained at github.com/open-cheme-hub/templates. MIT licence.
+Template maintained at github.com/OpenChemE/templates. MIT licence.
 -->

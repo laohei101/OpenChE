@@ -17,35 +17,35 @@ starter files and workflows to put it to use the same afternoon.
 
 | Repository | What it is |
 | --- | --- |
-| [`awesome-chemical-engineering`](https://github.com/open-cheme-hub/awesome-chemical-engineering) | Process simulation, thermodynamics, unit operations, control, safety, data, courses |
-| [`awesome-chemoinformatics`](https://github.com/open-cheme-hub/awesome-chemoinformatics) | Molecular representation, QSAR/QSPR, reaction prediction, chemical databases, ML for chemistry |
-| [`awesome-bioengineering`](https://github.com/open-cheme-hub/awesome-bioengineering) | Bioprocess modelling, genome-scale metabolic models, synthetic biology, biomaterials, tissue engineering |
-| [`awesome-medical-engineering`](https://github.com/open-cheme-hub/awesome-medical-engineering) | Medical device design, biomechanics, imaging, regulatory standards, clinical engineering, health informatics |
-| [`awesome-general-engineering`](https://github.com/open-cheme-hub/awesome-general-engineering) | CAD/CAE, control systems, signal processing, IoT and embedded, project management, ethics |
-| [`templates`](https://github.com/open-cheme-hub/templates) | Fork-and-edit starting points: mass balance notebook, reactor design skeleton, lab report, safety checklist, ELN entry, PID tuning |
-| [`workflows`](https://github.com/open-cheme-hub/workflows) | Reproducible Snakemake pipelines, reusable GitHub Actions, and a Docker image with RDKit + Open Babel + Cantera |
-| [`hub-website`](https://github.com/open-cheme-hub/hub-website) | The static site at [open-cheme-hub.github.io](https://open-cheme-hub.github.io), with search across every list |
-| [`.github`](https://github.com/open-cheme-hub/.github) | This profile, the code of conduct, and the shared contributing guide |
+| [`awesome-chemical-engineering`](https://github.com/OpenChemE/awesome-chemical-engineering) | Process simulation, thermodynamics, unit operations, control, safety, data, courses |
+| [`awesome-chemoinformatics`](https://github.com/OpenChemE/awesome-chemoinformatics) | Molecular representation, QSAR/QSPR, reaction prediction, chemical databases, ML for chemistry |
+| [`awesome-bioengineering`](https://github.com/OpenChemE/awesome-bioengineering) | Bioprocess modelling, genome-scale metabolic models, synthetic biology, biomaterials, tissue engineering |
+| [`awesome-medical-engineering`](https://github.com/OpenChemE/awesome-medical-engineering) | Medical device design, biomechanics, imaging, regulatory standards, clinical engineering, health informatics |
+| [`awesome-general-engineering`](https://github.com/OpenChemE/awesome-general-engineering) | CAD/CAE, control systems, signal processing, IoT and embedded, project management, ethics |
+| [`templates`](https://github.com/OpenChemE/templates) | Fork-and-edit starting points: mass balance notebook, reactor design skeleton, lab report, safety checklist, ELN entry, PID tuning |
+| [`workflows`](https://github.com/OpenChemE/workflows) | Reproducible Snakemake pipelines, reusable GitHub Actions, and a Docker image with RDKit + Open Babel + Cantera |
+| [`hub-website`](https://github.com/OpenChemE/hub-website) | The static site at [opencheme.github.io](https://opencheme.github.io), with search across every list |
+| [`.github`](https://github.com/OpenChemE/.github) | This profile, the code of conduct, and the shared contributing guide |
 
 ---
 
 ## Getting started
 
-**I'm a student.** Start with [`templates`](https://github.com/open-cheme-hub/templates). Fork it,
+**I'm a student.** Start with [`templates`](https://github.com/OpenChemE/templates). Fork it,
 open `mass_balance_notebook.ipynb`, and work a balance you already know how to do by hand — seeing
 the two agree is the fastest way to trust the tooling. Then browse the *Learning Resources* section
 of the chemical engineering list for free textbooks.
 
-**I'm a researcher.** Go to [`workflows`](https://github.com/open-cheme-hub/workflows). The
+**I'm a researcher.** Go to [`workflows`](https://github.com/OpenChemE/workflows). The
 Snakemake conformer-generation pipeline and the Docker image give you a reproducible environment
 that a reviewer can actually rerun. Pair it with the ELN template from `templates`.
 
 **I'm an industry engineer.** The *Process Simulation* and *Process Control & Safety* sections of
-[`awesome-chemical-engineering`](https://github.com/open-cheme-hub/awesome-chemical-engineering)
+[`awesome-chemical-engineering`](https://github.com/OpenChemE/awesome-chemical-engineering)
 are where most people land — open alternatives to licensed tools, plus `safety_checklist.md` in
 `templates` for a HAZOP-style pre-read.
 
-Full walkthrough: **[Get Started](https://open-cheme-hub.github.io/get-started/)**
+Full walkthrough: **[Get Started](https://opencheme.github.io/get-started/)**
 
 ---
 
@@ -57,16 +57,16 @@ Every list is a pull request away from being better. Adding a resource takes abo
 2. Add one line: `- [Name](url) — one-sentence description. \`tag\``
 3. Open the PR. The checklist in the template tells you what a reviewer will look for.
 
-Read [CONTRIBUTING.md](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md) first —
+Read [CONTRIBUTING.md](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md) first —
 it covers what gets accepted (maintained, openly licensed, genuinely useful) and what doesn't
 (paywalled tools, dead projects, self-promotion without substance).
 
 Questions, "does anyone have a good X", teaching notes, and war stories go in
-[Discussions](https://github.com/orgs/open-cheme-hub/discussions).
+[Discussions](https://github.com/orgs/OpenChemE/discussions).
 
 ## Code of Conduct
 
-We follow the [Contributor Covenant](https://github.com/open-cheme-hub/.github/blob/main/CODE_OF_CONDUCT.md).
+We follow the [Contributor Covenant](https://github.com/OpenChemE/.github/blob/main/CODE_OF_CONDUCT.md).
 Be the colleague you'd want on a startup team at 3am.
 
 ## Licence

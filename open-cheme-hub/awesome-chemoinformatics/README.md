@@ -10,7 +10,7 @@ organised by the question you're trying to answer.
 Everything here is free to use. Descriptions say what a tool does, not how good it is.
 
 **Contributions welcome** — see the
-[organisation contributing guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md).
+[organisation contributing guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md).
 
 ---
 
@@ -156,9 +156,9 @@ Everything here is free to use. Descriptions say what a tool does, not how good 
 
 ## Related Lists
 
-- [awesome-chemical-engineering](https://github.com/open-cheme-hub/awesome-chemical-engineering) — Process simulation and thermodynamics.
-- [awesome-bioengineering](https://github.com/open-cheme-hub/awesome-bioengineering) — Metabolic models and synthetic biology.
-- [workflows](https://github.com/open-cheme-hub/workflows) — A runnable RDKit conformer pipeline using several tools listed here.
+- [awesome-chemical-engineering](https://github.com/OpenChemE/awesome-chemical-engineering) — Process simulation and thermodynamics.
+- [awesome-bioengineering](https://github.com/OpenChemE/awesome-bioengineering) — Metabolic models and synthetic biology.
+- [workflows](https://github.com/OpenChemE/workflows) — A runnable RDKit conformer pipeline using several tools listed here.
 
 ---
 

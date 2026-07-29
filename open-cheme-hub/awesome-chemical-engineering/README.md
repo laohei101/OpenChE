@@ -140,10 +140,10 @@ about the solver.
 
 ## Related Lists
 
-- [awesome-chemoinformatics](https://github.com/open-cheme-hub/awesome-chemoinformatics) — Molecular modelling, QSAR, and ML for chemistry.
-- [awesome-bioengineering](https://github.com/open-cheme-hub/awesome-bioengineering) — Bioprocess and metabolic modelling.
-- [awesome-general-engineering](https://github.com/open-cheme-hub/awesome-general-engineering) — CAD/CAE, controls, and embedded.
-- [templates](https://github.com/open-cheme-hub/templates) — Starting files for balances, reactor design, and safety reviews.
+- [awesome-chemoinformatics](https://github.com/OpenChemE/awesome-chemoinformatics) — Molecular modelling, QSAR, and ML for chemistry.
+- [awesome-bioengineering](https://github.com/OpenChemE/awesome-bioengineering) — Bioprocess and metabolic modelling.
+- [awesome-general-engineering](https://github.com/OpenChemE/awesome-general-engineering) — CAD/CAE, controls, and embedded.
+- [templates](https://github.com/OpenChemE/templates) — Starting files for balances, reactor design, and safety reviews.
 
 ---
 

@@ -10,7 +10,7 @@ body:
         quickly — no need to file this first.
 
         ⚠️ **If the domain now serves malware, ads, or something impersonating the original
-        project, do not file a public issue.** Follow [SECURITY.md](https://github.com/open-cheme-hub/.github/blob/main/SECURITY.md).
+        project, do not file a public issue.** Follow [SECURITY.md](https://github.com/OpenChemE/.github/blob/main/SECURITY.md).
 
   - type: input
     id: entry

@@ -88,7 +88,7 @@ body:
     id: criteria
     attributes:
       label: Inclusion criteria
-      description: See [CONTRIBUTING.md](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md#what-we-accept-and-what-we-dont).
+      description: See [CONTRIBUTING.md](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md#what-we-accept-and-what-we-dont).
       options:
         - label: It's freely usable — open source, open access, or a genuinely usable free tier
           required: true

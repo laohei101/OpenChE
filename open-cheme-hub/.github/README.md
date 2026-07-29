@@ -1,7 +1,7 @@
 # `.github` — Open ChemE Hub community health files
 
 This repository holds the files GitHub applies across **every** repository in the
-[Open ChemE Hub](https://github.com/open-cheme-hub) organisation. Editing a file here changes the
+[Open ChemE Hub](https://github.com/OpenChemE) organisation. Editing a file here changes the
 default behaviour for all of our repositories at once.
 
 ## Layout
@@ -28,7 +28,7 @@ default behaviour for all of our repositories at once.
 
 GitHub falls back to this repository whenever an individual repo doesn't define its own copy:
 
-- **`profile/README.md`** is special — it renders on <https://github.com/open-cheme-hub>. Nothing
+- **`profile/README.md`** is special — it renders on <https://github.com/OpenChemE>. Nothing
   else in this repo does that.
 - **`CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md`** are inherited by all
   repos. A repo that needs different rules (for example, a list with unusual entry criteria) adds
@@ -51,6 +51,6 @@ Changes here affect contributors in eight other repositories, so:
 
 ## Contact
 
-Conduct reports and security disclosures: **conduct@open-cheme-hub.org** /
-**security@open-cheme-hub.org** (update these in your fork — see `setup_github.sh` notes).
-Everything else: [Discussions](https://github.com/orgs/open-cheme-hub/discussions).
+Conduct reports and security disclosures: **yu.dai@mail.utoronto.ca** /
+**yu.dai@mail.utoronto.ca** (update these in your fork — see `setup_github.sh` notes).
+Everything else: [Discussions](https://github.com/orgs/OpenChemE/discussions).

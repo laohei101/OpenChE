@@ -9,7 +9,7 @@ written to be read by someone learning as well as run by someone in a hurry.
 Nothing here needs installing. Clone the repository, or copy the one file you want.
 
 ```bash
-git clone https://github.com/open-cheme-hub/templates
+git clone https://github.com/OpenChemE/templates
 cd templates
 python unit_conversions.py       # runs a self-test with worked examples
 ```
@@ -207,7 +207,7 @@ A good template is something you'd hand a new hire on their first day.
 Notebooks: clear outputs before committing (`jupyter nbconvert --clear-output --inplace`) so
 diffs stay readable.
 
-Full guide: [CONTRIBUTING.md](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md).
+Full guide: [CONTRIBUTING.md](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md).
 
 ---
 

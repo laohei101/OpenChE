@@ -33,8 +33,8 @@
 #   the committed files points at `open-cheme-hub`; --rewrite-urls updates them
 #   to your org before committing.
 #
-# * PLACEHOLDER CONTACT ADDRESSES. `conduct@open-cheme-hub.org` and
-#   `security@open-cheme-hub.org` appear in CODE_OF_CONDUCT.md and SECURITY.md
+# * PLACEHOLDER CONTACT ADDRESSES. `yu.dai@mail.utoronto.ca` and
+#   `yu.dai@mail.utoronto.ca` appear in CODE_OF_CONDUCT.md and SECURITY.md
 #   and do not exist. Replace them with addresses you actually monitor — a code
 #   of conduct with an unreachable reporting address is worse than none.
 #
@@ -47,7 +47,7 @@
 set -euo pipefail
 
 # --- Defaults ----------------------------------------------------------------
-ORG="open-cheme-hub"
+ORG="OpenChemE"
 VISIBILITY="public"
 DRY_RUN=false
 REWRITE_URLS=false
@@ -109,7 +109,7 @@ USAGE
 
 OPTIONS
     --org NAME          GitHub organisation or user to publish under.
-                        Default: open-cheme-hub  (almost certainly taken — use your own)
+                        Default: OpenChemE
 
     --user              Publish under your personal account instead of an organisation.
                         Equivalent to --org <your-username> --skip-org-check
@@ -119,7 +119,7 @@ OPTIONS
     --dry-run           Print what would happen without creating or pushing anything.
                         Run this first.
 
-    --rewrite-urls      Rewrite github.com/open-cheme-hub -> github.com/<your-org>
+    --rewrite-urls      Rewrite github.com/OpenChemE -> github.com/<your-org>
                         throughout the files before committing. Do this unless you
                         are genuinely publishing as open-cheme-hub, or every
                         cross-link in your copy will point at someone else's org.
@@ -229,9 +229,8 @@ if [[ "$ORG" == "__USE_CURRENT_USER__" ]]; then
 fi
 
 # --- Warn about the placeholder org name -------------------------------------
-if [[ "$ORG" == "open-cheme-hub" ]]; then
-  warn "Using the default org name 'open-cheme-hub', which is almost certainly taken."
-  warn "Pass --org with your own name unless you really own this one."
+if [[ "$ORG" == "OpenChemE" ]]; then
+  info "Using the default org name 'OpenChemE'. Pass --org if you own a different one."
 fi
 
 # --- Warn about the token scope people forget --------------------------------
@@ -298,7 +297,7 @@ cat <<EOF
   Destination     ${BOLD}${ORG}${RESET}$( $ORG_IS_USER && echo " (personal account)" || echo " (organisation)")
   Visibility      ${VISIBILITY}
   Default branch  ${DEFAULT_BRANCH}
-  Rewrite URLs    $( $REWRITE_URLS && echo "yes -> github.com/${ORG}" || echo "no (links will point at open-cheme-hub)" )
+  Rewrite URLs    $( $REWRITE_URLS && echo "yes -> github.com/${ORG}" || echo "no (links point at OpenChemE)" )
   Mode            $( $DRY_RUN && echo "${YELLOW}DRY RUN — nothing will be created${RESET}" || echo "${GREEN}LIVE${RESET}" )
 
   Repositories to create or update:
@@ -320,8 +319,8 @@ if (( ${#MISSING_DIRS[@]} > 0 )); then
   die "Missing directories: ${MISSING_DIRS[*]}. Run this script from inside open-cheme-hub/."
 fi
 
-if ! $REWRITE_URLS && [[ "$ORG" != "open-cheme-hub" ]]; then
-  warn "You are publishing to '${ORG}' but URLs still point at 'open-cheme-hub'."
+if ! $REWRITE_URLS && [[ "$ORG" != "OpenChemE" ]]; then
+  warn "You are publishing to '${ORG}' but URLs still point at 'OpenChemE'."
   warn "Every cross-reference in your copy will link to someone else's organisation."
   warn "Re-run with --rewrite-urls unless that is what you want."
   echo
@@ -335,11 +334,11 @@ fi
 # =============================================================================
 # 4. Rewrite URLs
 # =============================================================================
-if $REWRITE_URLS && [[ "$ORG" != "open-cheme-hub" ]]; then
+if $REWRITE_URLS && [[ "$ORG" != "OpenChemE" ]]; then
   step "4. Rewriting URLs to ${ORG}"
 
   if $DRY_RUN; then
-    hits=$(grep -rl 'open-cheme-hub' "${SCRIPT_DIR}" \
+    hits=$(grep -rl 'OpenChemE' "${SCRIPT_DIR}" \
              --include='*.md' --include='*.yml' --include='*.yaml' \
              --include='*.html' --include='*.json' --include='*.py' \
              --include='*.js' --include='*.sh' --include='*.dwxml' \
@@ -354,10 +353,10 @@ if $REWRITE_URLS && [[ "$ORG" != "open-cheme-hub" ]]; then
          -o -name '*.dwxml' -o -name 'Dockerfile' -o -name 'Snakefile' \) \
       -not -path '*/.git/*' -print0 \
     | LC_ALL=C xargs -0 sed -i.bak \
-        -e "s|github\.com/open-cheme-hub|github.com/${ORG}|g" \
-        -e "s|orgs/open-cheme-hub|orgs/${ORG}|g" \
-        -e "s|ghcr\.io/open-cheme-hub|ghcr.io/${ORG}|g" \
-        -e "s|open-cheme-hub\.github\.io|${ORG}.github.io|g"
+        -e "s|github\.com/OpenChemE|github.com/${ORG}|g" \
+        -e "s|orgs/OpenChemE|orgs/${ORG}|g" \
+        -e "s|ghcr\.io/opencheme|ghcr.io/$(echo "${ORG}" | tr "[:upper:]" "[:lower:]")|g" \
+        -e "s|opencheme\.github\.io|$(echo "${ORG}" | tr "[:upper:]" "[:lower:]").github.io|g"
 
     find "${SCRIPT_DIR}" -name '*.bak' -not -path '*/.git/*' -delete
     success "URLs rewritten to ${ORG}"
@@ -575,8 +574,8 @@ cat <<EOF
        Create the categories the issue templates link to: Q&A, Ideas, Show and Tell.
        Those links 404 until you do.
 
-    2. ${BOLD}Replace the placeholder contact addresses.${RESET}
-       conduct@open-cheme-hub.org and security@open-cheme-hub.org appear in
+    2. ${BOLD}Confirm the contact address.${RESET}
+       yu.dai@mail.utoronto.ca and yu.dai@mail.utoronto.ca appear in
        CODE_OF_CONDUCT.md and SECURITY.md and do not exist. A code of conduct
        with an unreachable reporting address is worse than not having one.
 

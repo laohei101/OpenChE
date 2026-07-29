@@ -53,7 +53,7 @@ changed. Run `./setup_github.sh --help` for the rest of the options.
    exist yet the script tells you where to click; it takes about thirty seconds. Or use
    `--user` to publish under your own account.
 
-2. **The contact addresses.** `conduct@open-cheme-hub.org` and `security@open-cheme-hub.org`
+2. **The contact addresses.** `yu.dai@mail.utoronto.ca` and `yu.dai@mail.utoronto.ca`
    appear in `CODE_OF_CONDUCT.md` and `SECURITY.md` and do not exist. Replace them with
    addresses you actually monitor. A code of conduct with an unreachable reporting address is
    worse than not having one, because it looks like a promise.

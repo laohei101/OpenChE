@@ -18,7 +18,7 @@ Three things live here, each solving a different part of "it worked on my machin
 ### Run the conformer pipeline
 
 ```bash
-git clone https://github.com/open-cheme-hub/workflows
+git clone https://github.com/OpenChemE/workflows
 cd workflows/snakemake
 
 conda env create -f environment.yaml     # or: mamba env create -f environment.yaml
@@ -33,8 +33,8 @@ Output lands in `results/`. Start with `results/summary/report.md`.
 ### Use the container instead
 
 ```bash
-docker pull ghcr.io/open-cheme-hub/chem-toolkit:1.2.0
-docker run --rm -it -v "$PWD:/work" ghcr.io/open-cheme-hub/chem-toolkit:1.2.0
+docker pull ghcr.io/opencheme/chem-toolkit:1.2.0
+docker run --rm -it -v "$PWD:/work" ghcr.io/opencheme/chem-toolkit:1.2.0
 ```
 
 Or build it yourself:
@@ -193,7 +193,7 @@ spawning N threads is how you get a call from the sysadmin. Override with
 ## Contributing a workflow
 
 Workflows carry a higher bar than list entries, because people will trust them with real
-analyses. From the [organisation guide](https://github.com/open-cheme-hub/.github/blob/main/CONTRIBUTING.md):
+analyses. From the [organisation guide](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md):
 
 - **Pin dependencies to versions.** `environment.yaml` with exact pins, or a Docker digest.
   `latest` is not a version.
@@ -221,6 +221,6 @@ your_workflow/
 
 ## Licence
 
-MIT. See the [organisation licence](https://github.com/open-cheme-hub/.github/blob/main/LICENSE).
+MIT. See the [organisation licence](https://github.com/OpenChemE/.github/blob/main/LICENSE).
 Dependencies keep their own licences — RDKit is BSD-3, Open Babel is GPL-2.0, Cantera is
 BSD-3. If you redistribute the container image, GPL obligations from Open Babel travel with it.
