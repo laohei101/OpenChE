@@ -1,0 +1,76 @@
+# =============================================================================
+# Environment for the chem-toolkit Docker image.
+#
+# Consumed by the Dockerfile in this directory. Usable standalone too:
+#     micromamba env create -f environment.yaml -n chem-toolkit
+#
+# Pinning policy: exact versions for anything whose behaviour can change a
+# scientific result (RDKit, Cantera, CoolProp, the property libraries), and for
+# anything with a history of breaking changes. That is nearly everything here.
+# =============================================================================
+name: base
+
+channels:
+  - conda-forge
+
+dependencies:
+  # --- core -----------------------------------------------------------------
+  - python=3.11.9
+  - pip=24.0
+
+  # --- cheminformatics ------------------------------------------------------
+  - rdkit=2024.03.5
+  - openbabel=3.1.1
+
+  # --- kinetics and thermodynamics ------------------------------------------
+  - cantera=3.0.0            # reacting flow, equilibrium, reactor networks
+  - coolprop=6.6.0           # Helmholtz-energy properties for ~122 fluids
+
+  # --- process engineering (Caleb Bell's stack) -----------------------------
+  - thermo=0.2.27            # flashes, EOS, activity models
+  - chemicals=1.1.5          # pure-component constants and correlations
+  - fluids=1.0.25            # pressure drop, valve sizing, two-phase flow
+  - ht=1.0.5                 # heat transfer correlations and exchanger sizing
+
+  # --- numerics -------------------------------------------------------------
+  - numpy=1.26.4
+  - scipy=1.13.1
+  - pandas=2.2.2
+  - sympy=1.12.1
+
+  # --- optimisation ---------------------------------------------------------
+  - pyomo=6.7.3              # algebraic modelling for LP/NLP/MINLP
+  - ipopt=3.14.16            # interior-point NLP solver, Pyomo's usual backend
+  - glpk=5.0                 # open MILP solver
+
+  # --- workflow -------------------------------------------------------------
+  - snakemake-minimal=8.20.3
+  - pulp=2.7.0               # pinned: 2.8 broke the Snakemake 8 scheduler
+
+  # --- notebooks and plotting -----------------------------------------------
+  - jupyterlab=4.2.3
+  - ipywidgets=8.1.3
+  - matplotlib-base=3.8.4
+  - seaborn=0.13.2
+  - plotly=5.22.0
+  - py3dmol=2.1.0            # 3D structure views inside notebooks
+
+  # --- utilities ------------------------------------------------------------
+  - pyyaml=6.0.1
+  - tqdm=4.66.4
+  - click=8.1.7
+  - pint=0.24.1              # units with dimensional analysis
+  - uncertainties=3.2.2      # error propagation
+
+  # --- development ----------------------------------------------------------
+  - pytest=8.2.2
+  - black=24.4.2
+  - ruff=0.5.0
+
+  # --- pip-only packages ----------------------------------------------------
+  # Nothing here has a conda-forge build. Keep this list short: every pip
+  # package installed alongside conda packages is a chance for two copies of a
+  # shared library to end up in the same process.
+  - pip:
+      - datamol==0.12.5      # ergonomic RDKit wrapper
+      - molplotly==1.1.7     # structure tooltips on Plotly scatter plots

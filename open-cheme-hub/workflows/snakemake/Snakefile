@@ -1,0 +1,298 @@
+# =============================================================================
+# conformer_generation_dft
+#
+# A reproducible pipeline that takes SMILES strings and produces, for each
+# molecule, a set of MMFF-optimised, energy-ranked, deduplicated 3D conformers
+# ready for a quantum-chemistry refinement step.
+#
+#   SMILES -> embed (ETKDGv3) -> MMFF94s optimise -> prune by RMSD
+#          -> Boltzmann-weight -> export SDF + XYZ + summary
+#
+# Author  : Open ChemE Hub contributors
+# Licence : MIT
+#
+# Run it:
+#     conda env create -f environment.yaml
+#     conda activate conformer-gen
+#     snakemake --cores 4
+#
+# Dry run first, always:
+#     snakemake -n --cores 4
+#
+# On a cluster:
+#     snakemake --profile slurm --jobs 100
+#
+# -----------------------------------------------------------------------------
+# WHAT THIS PIPELINE IS AND IS NOT
+# -----------------------------------------------------------------------------
+# IS:  a fast, defensible way to generate a diverse conformer ensemble and rank
+#      it by force-field energy. Good enough to feed docking, to pick starting
+#      geometries for DFT, or to estimate conformational flexibility.
+#
+# IS NOT: a source of accurate relative conformer energies. MMFF94s is a
+#      force field. It will get the *geometries* approximately right and the
+#      *energy ordering* wrong often enough to matter, particularly for
+#      intramolecular hydrogen bonding, conjugation, and anything charged.
+#
+#      The `dft` in the pipeline name is the step you do NEXT, with the inputs
+#      this produces. The `prepare_dft_inputs` rule writes ready-to-submit ORCA
+#      and Psi4 input files; it deliberately does not run them, because DFT on
+#      a real ensemble is a cluster job with a queue, not a Snakemake rule on
+#      your laptop.
+#
+#      For anything where conformer energies decide the answer, use CREST/xtb
+#      for the search (it does metadynamics sampling and GFN2 energies) and
+#      treat this pipeline as the cheap first pass.
+# =============================================================================
+
+import os
+
+configfile: "config.yaml"
+
+# Molecule identifiers come from the input CSV. Reading it at parse time is
+# what lets Snakemake build the full DAG before running anything.
+import csv
+
+def read_molecule_ids(path):
+    """Return the ID column of the input CSV, validating as we go."""
+    ids = []
+    with open(path, newline="") as fh:
+        reader = csv.DictReader(fh)
+        required = {"id", "smiles"}
+        missing = required - set(reader.fieldnames or [])
+        if missing:
+            raise ValueError(f"{path} is missing required column(s): {sorted(missing)}")
+        for row in reader:
+            mol_id = row["id"].strip()
+            if not mol_id:
+                raise ValueError(f"{path} has a row with an empty id")
+            if "/" in mol_id or " " in mol_id:
+                raise ValueError(
+                    f"Molecule id {mol_id!r} contains a slash or space; ids become "
+                    f"filenames, so keep them to [A-Za-z0-9_-]."
+                )
+            ids.append(mol_id)
+    if len(ids) != len(set(ids)):
+        raise ValueError(f"{path} contains duplicate ids")
+    return ids
+
+
+INPUT_CSV = config["input_csv"]
+OUTDIR = config["output_dir"]
+MOLECULES = read_molecule_ids(INPUT_CSV)
+
+wildcard_constraints:
+    mol_id=r"[A-Za-z0-9_\-]+",
+
+
+# =============================================================================
+# Target rule -- what "snakemake" with no arguments builds
+# =============================================================================
+
+rule all:
+    input:
+        expand(f"{OUTDIR}/conformers/{{mol_id}}.sdf", mol_id=MOLECULES),
+        expand(f"{OUTDIR}/xyz/{{mol_id}}_conf000.xyz", mol_id=MOLECULES),
+        f"{OUTDIR}/summary/ensemble_summary.csv",
+        f"{OUTDIR}/summary/report.md",
+        expand(f"{OUTDIR}/dft_inputs/{{mol_id}}_conf000.inp", mol_id=MOLECULES),
+
+
+# =============================================================================
+# Rule 1 -- validate and standardise the input structures
+#
+# Standardisation before anything else. Salts, mixtures, and inconsistent
+# tautomers are the usual reason a conformer job produces nonsense, and they
+# are much cheaper to catch here than after 200 embeddings.
+# =============================================================================
+
+rule standardise:
+    input:
+        csv=INPUT_CSV,
+    output:
+        csv=f"{OUTDIR}/standardised/molecules.csv",
+        rejected=f"{OUTDIR}/standardised/rejected.csv",
+    log:
+        f"{OUTDIR}/logs/standardise.log",
+    conda:
+        "environment.yaml"
+    params:
+        max_heavy_atoms=config["filters"]["max_heavy_atoms"],
+        strip_salts=config["filters"]["strip_salts"],
+        neutralise=config["filters"]["neutralise"],
+    script:
+        "scripts/standardise.py"
+
+
+# =============================================================================
+# Rule 2 -- embed conformers
+#
+# ETKDGv3 with a fixed random seed. The seed is what makes this pipeline
+# reproducible: without it, two runs give different ensembles and you can never
+# tell whether a change in your results came from your change or from the RNG.
+# =============================================================================
+
+rule embed_conformers:
+    input:
+        csv=f"{OUTDIR}/standardised/molecules.csv",
+    output:
+        sdf=f"{OUTDIR}/embedded/{{mol_id}}.sdf",
+    log:
+        f"{OUTDIR}/logs/embed_{{mol_id}}.log",
+    conda:
+        "environment.yaml"
+    threads: config["resources"]["embed_threads"]
+    resources:
+        mem_mb=config["resources"]["embed_mem_mb"],
+        runtime=config["resources"]["embed_runtime_min"],
+    params:
+        n_conformers=config["conformers"]["n_initial"],
+        random_seed=config["conformers"]["random_seed"],
+        prune_rms=config["conformers"]["embed_prune_rms"],
+        use_random_coords=config["conformers"]["use_random_coords"],
+    script:
+        "scripts/embed_conformers.py"
+
+
+# =============================================================================
+# Rule 3 -- force-field optimisation and RMSD pruning
+#
+# MMFF94s by default. UFF is the fallback for molecules MMFF cannot type
+# (organometallics, unusual valences) -- the script reports which was used per
+# molecule, and you should check that column before comparing energies across
+# a set, since UFF and MMFF energies are not on the same scale.
+# =============================================================================
+
+rule optimise_and_prune:
+    input:
+        sdf=f"{OUTDIR}/embedded/{{mol_id}}.sdf",
+    output:
+        sdf=f"{OUTDIR}/conformers/{{mol_id}}.sdf",
+        energies=f"{OUTDIR}/energies/{{mol_id}}.csv",
+    log:
+        f"{OUTDIR}/logs/optimise_{{mol_id}}.log",
+    conda:
+        "environment.yaml"
+    threads: config["resources"]["optimise_threads"]
+    resources:
+        mem_mb=config["resources"]["optimise_mem_mb"],
+        runtime=config["resources"]["optimise_runtime_min"],
+    params:
+        force_field=config["conformers"]["force_field"],
+        max_iters=config["conformers"]["max_iterations"],
+        energy_window=config["conformers"]["energy_window_kcal"],
+        rmsd_threshold=config["conformers"]["rmsd_threshold"],
+        max_final=config["conformers"]["n_final_max"],
+        temperature=config["conformers"]["boltzmann_temperature_k"],
+    script:
+        "scripts/optimise_prune.py"
+
+
+# =============================================================================
+# Rule 4 -- export XYZ for the lowest-energy conformers
+#
+# XYZ because every quantum chemistry package reads it and nothing about it
+# can be ambiguous. Open Babel is used here rather than RDKit purely to show
+# a second tool in the environment; RDKit could do it alone.
+# =============================================================================
+
+rule export_xyz:
+    input:
+        sdf=f"{OUTDIR}/conformers/{{mol_id}}.sdf",
+    output:
+        xyz=f"{OUTDIR}/xyz/{{mol_id}}_conf000.xyz",
+    log:
+        f"{OUTDIR}/logs/xyz_{{mol_id}}.log",
+    conda:
+        "environment.yaml"
+    params:
+        outdir=lambda w: f"{OUTDIR}/xyz",
+        n_export=config["export"]["n_xyz_per_molecule"],
+    shell:
+        r"""
+        mkdir -p {params.outdir}
+        # -m splits a multi-conformer SDF into one file per conformer.
+        # Open Babel names them <base>1.xyz, <base>2.xyz ... so we rename to a
+        # zero-padded, zero-indexed convention that sorts correctly.
+        obabel {input.sdf} -O {params.outdir}/{wildcards.mol_id}_tmp.xyz -m 2>> {log}
+
+        i=0
+        for f in $(ls {params.outdir}/{wildcards.mol_id}_tmp*.xyz | sort -V); do
+            if [ "$i" -ge "{params.n_export}" ]; then rm -f "$f"; continue; fi
+            printf -v padded "%03d" "$i"
+            mv "$f" "{params.outdir}/{wildcards.mol_id}_conf${{padded}}.xyz"
+            i=$((i+1))
+        done
+        echo "exported $i conformer(s) for {wildcards.mol_id}" >> {log}
+        """
+
+
+# =============================================================================
+# Rule 5 -- write DFT input files
+#
+# Generated, not run. Each file is a complete, submittable job; look at one
+# before you submit a thousand.
+# =============================================================================
+
+rule prepare_dft_inputs:
+    input:
+        xyz=f"{OUTDIR}/xyz/{{mol_id}}_conf000.xyz",
+    output:
+        inp=f"{OUTDIR}/dft_inputs/{{mol_id}}_conf000.inp",
+    log:
+        f"{OUTDIR}/logs/dft_input_{{mol_id}}.log",
+    conda:
+        "environment.yaml"
+    params:
+        method=config["dft"]["method"],
+        basis=config["dft"]["basis"],
+        dispersion=config["dft"]["dispersion"],
+        solvent=config["dft"]["solvent"],
+        charge=config["dft"]["default_charge"],
+        multiplicity=config["dft"]["default_multiplicity"],
+        nprocs=config["dft"]["nprocs"],
+        maxcore_mb=config["dft"]["maxcore_mb"],
+    script:
+        "scripts/write_dft_input.py"
+
+
+# =============================================================================
+# Rule 6 -- aggregate
+# =============================================================================
+
+rule summarise:
+    input:
+        energies=expand(f"{OUTDIR}/energies/{{mol_id}}.csv", mol_id=MOLECULES),
+        rejected=f"{OUTDIR}/standardised/rejected.csv",
+    output:
+        csv=f"{OUTDIR}/summary/ensemble_summary.csv",
+        report=f"{OUTDIR}/summary/report.md",
+    log:
+        f"{OUTDIR}/logs/summarise.log",
+    conda:
+        "environment.yaml"
+    params:
+        temperature=config["conformers"]["boltzmann_temperature_k"],
+    script:
+        "scripts/summarise.py"
+
+
+# =============================================================================
+# Housekeeping
+# =============================================================================
+
+rule clean:
+    """Remove all generated output. Does not touch inputs."""
+    shell:
+        f"rm -rf {OUTDIR}"
+
+
+onsuccess:
+    print(f"\nPipeline complete. Start with {OUTDIR}/summary/report.md\n")
+
+
+onerror:
+    print(
+        "\nPipeline failed. The rule-specific log under "
+        f"{OUTDIR}/logs/ will say more than this message does.\n"
+    )

@@ -1,0 +1,6 @@
+id,smiles,name,note
+ethanol,CCO,Ethanol,Rigid reference - expect very few conformers
+ibuprofen,CC(C)Cc1ccc(cc1)C(C)C(=O)O,Ibuprofen,4 rotatable bonds - a normal drug-like case
+caffeine,Cn1cnc2c1c(=O)n(C)c(=O)n2C,Caffeine,Rigid fused ring - expect a single conformer
+glutamic_acid,N[C@@H](CCC(=O)O)C(=O)O,L-Glutamic acid,Zwitterionic at pH 7 - see the neutralise setting
+octane,CCCCCCCC,n-Octane,5 rotatable bonds in a chain - tests RMSD pruning hard

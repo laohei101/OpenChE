@@ -1,0 +1,135 @@
+# =============================================================================
+# Configuration for conformer_generation_dft
+#
+# Every parameter that changes the scientific result lives here, not in the
+# Snakefile or the scripts. That means a run is fully described by this file
+# plus the input CSV plus the environment -- commit all three together.
+# =============================================================================
+
+# --- Input and output --------------------------------------------------------
+# CSV with at least: id, smiles. Extra columns are carried through to the
+# summary, so put your assay values or compound classes there.
+input_csv: "test_data/molecules.csv"
+output_dir: "results"
+
+
+# --- Structure filtering and standardisation ---------------------------------
+filters:
+  # Conformer count needed for adequate sampling grows roughly exponentially
+  # with rotatable bonds. Above ~50 heavy atoms this pipeline is the wrong tool
+  # -- use CREST, or a systematic search on the flexible fragment only.
+  max_heavy_atoms: 50
+
+  # Strip counterions and keep the largest organic fragment. Almost always
+  # what you want; turn it off if you are deliberately studying a salt or a
+  # cocrystal, where the counterion is the point.
+  strip_salts: true
+
+  # Neutralise charges where a neutral form is chemically sensible. Note this
+  # changes the molecule: a carboxylate at pH 7.4 is NOT neutral, and if your
+  # downstream question is about binding at physiological pH you should set
+  # this to false and supply the correct protonation state yourself.
+  neutralise: false
+
+  # Reject molecules RDKit cannot sanitise rather than guessing at a fix.
+  # Rejected rows go to standardised/rejected.csv with the reason.
+  skip_unsanitisable: true
+
+
+# --- Conformer generation ----------------------------------------------------
+conformers:
+  # Initial embeddings, before pruning. Rules of thumb by rotatable bond count:
+  #     0-2 bonds   ->  50
+  #     3-5 bonds   -> 200
+  #     6-8 bonds   -> 500
+  #     9+  bonds   -> 1000+, and start questioning the approach
+  # This is a flat number for simplicity; scale it in scripts/embed_conformers.py
+  # if your set spans a wide flexibility range.
+  n_initial: 200
+
+  # THE reproducibility parameter. Change it and you get a different (equally
+  # valid) ensemble. Never leave it unset -- a pipeline whose output changes
+  # run to run cannot be debugged.
+  random_seed: 0xF00D
+
+  # RMSD threshold applied during embedding to reject near-duplicates early.
+  # Cheaper than generating them and pruning afterwards.
+  embed_prune_rms: 0.25
+
+  # Random starting coordinates instead of the distance-geometry guess. Slower,
+  # but recovers cases where ETKDG fails on cage-like or macrocyclic systems.
+  use_random_coords: false
+
+  # MMFF94s or UFF. MMFF94s is better for organics; UFF covers more elements.
+  # The pipeline falls back to UFF automatically when MMFF typing fails, and
+  # records which was used per molecule.
+  force_field: "MMFF94s"
+
+  max_iterations: 2000
+
+  # Discard conformers more than this far above the global minimum. 10 kcal/mol
+  # is generous -- populations above ~3 kcal/mol are already below 1% at 298 K.
+  # Keep it wide here because force-field energies are unreliable enough that
+  # aggressive early pruning can throw away the true minimum.
+  energy_window_kcal: 10.0
+
+  # Heavy-atom RMSD below which two conformers are considered the same.
+  # 0.5 A is standard for drug-like molecules; tighten to 0.3 for small rigid
+  # systems where you care about subtle differences.
+  rmsd_threshold: 0.5
+
+  # Cap after pruning. The Boltzmann-weighted ensemble is truncated to this
+  # many conformers, highest population first.
+  n_final_max: 20
+
+  boltzmann_temperature_k: 298.15
+
+
+# --- Export ------------------------------------------------------------------
+export:
+  # XYZ files written per molecule, lowest energy first. Rule `all` requires
+  # conf000, so this must be at least 1.
+  n_xyz_per_molecule: 5
+  write_ensemble_sdf: true
+
+
+# --- DFT input generation (files are written, not executed) ------------------
+dft:
+  # r2SCAN-3c is a strong default: composite method, its own basis and
+  # corrections, roughly the cost of a small-basis DFT calculation with much
+  # better geometries. Alternatives worth knowing:
+  #   B97-3c        cheaper, good geometries
+  #   wB97X-D4      better for non-covalent interactions, more expensive
+  #   PBE0          reliable general purpose hybrid, needs a real basis set
+  method: "r2SCAN-3c"
+
+  # Composite methods (anything ending -3c) carry their own basis; leave blank.
+  # For a conventional functional use e.g. "def2-TZVP".
+  basis: ""
+
+  # D4 is current; D3BJ is fine and more widely supported. Composite methods
+  # already include dispersion, so leave empty for those.
+  dispersion: ""
+
+  # Implicit solvation. Empty for gas phase. CPCM(water), CPCM(toluene), ...
+  # Conformer populations can reorder completely between gas and solvent --
+  # if your experiment is in solution, so should your calculation be.
+  solvent: "CPCM(water)"
+
+  default_charge: 0
+  default_multiplicity: 1
+
+  nprocs: 8
+  maxcore_mb: 3000
+
+
+# --- Compute resources -------------------------------------------------------
+# Used by Snakemake for scheduling and, on a cluster, for the job submission.
+resources:
+  embed_threads: 4
+  embed_mem_mb: 4000
+  embed_runtime_min: 30
+
+  optimise_threads: 4
+  optimise_mem_mb: 8000
+  optimise_runtime_min: 60

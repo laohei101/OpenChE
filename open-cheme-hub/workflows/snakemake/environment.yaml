@@ -1,0 +1,67 @@
+# =============================================================================
+# Conda environment for conformer_generation_dft
+#
+#     conda env create -f environment.yaml
+#     conda activate conformer-gen
+#
+# Or, much faster:
+#     mamba env create -f environment.yaml
+#
+# EVERY VERSION IS PINNED. That is the point. An unpinned environment is not a
+# reproducible one -- RDKit's conformer generation defaults have changed across
+# releases (ETKDG -> ETKDGv2 -> ETKDGv3), and a pipeline that silently picks up
+# a new default is a pipeline whose old results cannot be reproduced.
+#
+# To update: change one pin, rerun the test case, check the summary numbers
+# still match, then commit the pin change and the new numbers together.
+# =============================================================================
+name: conformer-gen
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # --- core language --------------------------------------------------------
+  - python=3.11.9
+
+  # --- cheminformatics ------------------------------------------------------
+  - rdkit=2024.03.5          # conformers, force fields, standardisation
+  - openbabel=3.1.1          # format conversion (SDF -> XYZ in rule export_xyz)
+
+  # --- workflow -------------------------------------------------------------
+  - snakemake-minimal=8.20.3
+  - pulp=2.7.0               # Snakemake 8 scheduler dependency; 2.8 broke it
+
+  # --- numerics and data ----------------------------------------------------
+  - numpy=1.26.4
+  - pandas=2.2.2
+  - scipy=1.13.1
+
+  # --- reporting ------------------------------------------------------------
+  - matplotlib-base=3.8.4
+  - jinja2=3.1.4
+
+  # --- utilities ------------------------------------------------------------
+  - pyyaml=6.0.1
+  - tqdm=4.66.4
+
+  # --- optional: semi-empirical refinement ----------------------------------
+  # Uncomment to add a GFN2-xTB optimisation between the force field and DFT.
+  # Roughly 100x the cost of MMFF and roughly 1000x cheaper than DFT, with
+  # much better relative energies than any force field. For any study where
+  # conformer populations matter, this step is worth its cost.
+  # - xtb=6.7.0
+  # - crest=3.0.1
+
+  # --- optional: quantum chemistry ------------------------------------------
+  # The pipeline writes ORCA inputs but does not run them. Psi4 is installable
+  # from conda and can run the smaller jobs locally if you want an end-to-end
+  # test without a cluster. ORCA itself is not on conda-forge -- it needs a
+  # (free, academic) registration and a manual install.
+  # - psi4=1.9.1
+
+  # --- development ----------------------------------------------------------
+  - pytest=8.2.2
+  - black=24.4.2
+  - ruff=0.5.0
