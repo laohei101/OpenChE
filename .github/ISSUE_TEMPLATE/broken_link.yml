@@ -1,0 +1,62 @@
+name: 🔗 Broken or moved link
+description: A link in one of the lists is dead, redirects somewhere unexpected, or the project moved.
+title: "[link] "
+labels: ["broken-link", "good first issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If you already know the new URL, a pull request fixing it is welcome and will be merged
+        quickly — no need to file this first.
+
+        ⚠️ **If the domain now serves malware, ads, or something impersonating the original
+        project, do not file a public issue.** Follow [SECURITY.md](https://github.com/OpenChemE/.github/blob/main/SECURITY.md).
+
+  - type: input
+    id: entry
+    attributes:
+      label: Which entry?
+      placeholder: "awesome-chemical-engineering → Process Simulation → COCO Simulator"
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: The link as it appears now
+      placeholder: https://example.org/old-path
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: What happens when you follow it?
+      options:
+        - 404 / page not found
+        - Domain no longer resolves
+        - Redirects to an unrelated page
+        - Project moved (I know the new home)
+        - Now behind a paywall or registration
+        - Certificate error or blocked
+        - Something else (explain below)
+    validations:
+      required: true
+
+  - type: input
+    id: replacement
+    attributes:
+      label: New URL, if you know it
+      placeholder: https://example.org/new-home
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: >-
+        If the project looks abandoned rather than moved, say so — we may remove the entry
+        instead of updating it. Suggestions for a replacement resource are welcome.
+    validations:
+      required: false

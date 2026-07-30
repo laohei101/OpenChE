@@ -1,0 +1,34 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Ask a question (Q&A)
+    url: https://github.com/orgs/OpenChemE/discussions/categories/q-a
+    about: >-
+      "Is there an open-source alternative to X?", "Which library should I use for Y?",
+      "How do I run this on a cluster?" — questions get answered faster in Discussions,
+      and the answers stay searchable for the next person.
+
+  - name: 💡 Propose a new list, section, or direction
+    url: https://github.com/orgs/OpenChemE/discussions/categories/ideas
+    about: >-
+      Structural changes benefit from discussion before someone writes the PR. Start here
+      for new awesome lists, section reorganisations, or changes to contribution policy.
+
+  - name: 📣 Show what you built
+    url: https://github.com/orgs/OpenChemE/discussions/categories/show-and-tell
+    about: >-
+      Built a tool, taught a course with our templates, published a paper using one of the
+      workflows? Post it here. Self-promotion is welcome in this category.
+
+  - name: 📖 Contributing guide
+    url: https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md
+    about: How to add a resource, submit a template, or contribute a workflow.
+
+  - name: 🔒 Report a security issue
+    url: https://github.com/OpenChemE/.github/blob/main/SECURITY.md
+    about: >-
+      Malicious code, a hijacked link, or an abusable workflow — report privately, not as
+      a public issue.
+
+  - name: 🤝 Code of Conduct
+    url: https://github.com/OpenChemE/.github/blob/main/CODE_OF_CONDUCT.md
+    about: What we expect from everyone here, and how to report a problem.

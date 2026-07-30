@@ -1,0 +1,117 @@
+# Controlled category vocabulary.
+#
+# Categories are the second level of navigation, under `domains`. Adding one is
+# a deliberate act: an unbounded category list is the same as no category list,
+# because nothing groups. Propose new categories in a pull request that also
+# assigns at least two existing records to them.
+#
+# Validated by scripts/validate_catalog.py.
+
+chemical-engineering:
+  - flowsheeting
+  - process-simulation
+  - thermodynamics
+  - physical-properties
+  - reaction-engineering
+  - kinetics
+  - unit-operations
+  - heat-transfer
+  - mass-transfer
+  - separations
+  - fluid-mechanics
+  - optimisation
+  - numerical-solvers
+  - process-control
+  - system-identification
+  - process-safety
+  - consequence-modelling
+  - computational-fluid-dynamics
+  - data-and-benchmarks
+  - learning-resources
+  - community
+
+process-systems-engineering:
+  - flowsheeting
+  - optimisation
+  - process-control
+  - scheduling
+  - techno-economic-analysis
+  - life-cycle-assessment
+
+chemoinformatics:
+  - molecular-toolkits
+  - molecular-representations
+  - file-formats
+  - pipelines
+  - descriptors-and-fingerprints
+  - qsar
+  - machine-learning
+  - reaction-prediction
+  - retrosynthesis
+  - quantum-chemistry
+  - molecular-dynamics
+  - chemical-databases
+  - visualisation
+  - benchmarks
+  - learning-resources
+  - community
+
+bioengineering:
+  - bioprocess-modelling
+  - genome-scale-models
+  - kinetic-modelling
+  - synthetic-biology
+  - protein-engineering
+  - biomaterials
+  - tissue-engineering
+  - bioinformatics
+  - standards-and-data
+  - learning-resources
+  - community
+
+medical-engineering:
+  - device-design
+  - biomechanics
+  - medical-imaging
+  - physiological-signals
+  - regulatory-and-standards
+  - quality-and-risk
+  - clinical-engineering
+  - health-informatics
+  - datasets
+  - learning-resources
+  - community
+
+general-engineering:
+  - cad-and-geometry
+  - cae-and-fea
+  - meshing
+  - control-systems
+  - signal-processing
+  - instrumentation
+  - embedded-and-iot
+  - industrial-protocols
+  - numerical-computing
+  - units-and-uncertainty
+  - reliability
+  - documentation
+  - project-management
+  - engineering-ethics
+  - learning-resources
+
+sustainability:
+  - life-cycle-assessment
+  - techno-economic-analysis
+  - emissions
+
+electrochemistry:
+  - batteries
+  - electrolysis
+
+materials:
+  - materials-databases
+  - polymers
+
+energy:
+  - energy-systems
+  - process-integration

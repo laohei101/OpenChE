@@ -1,0 +1,58 @@
+# Validates the canonical catalog and proves every generated view is current.
+#
+# The staleness check is the load-bearing part: it is what stops the Markdown
+# lists, the search index, and the resource pages from drifting apart again.
+# Editing a generated file by hand fails here with a diff.
+name: Catalog
+
+on:
+  push:
+    branches: [main]
+    paths: ["catalog/**", "schemas/**", "scripts/**", "lists/**", "public/**", ".github/workflows/catalog.yml"]
+  pull_request:
+    paths: ["catalog/**", "schemas/**", "scripts/**", "lists/**", "public/**", ".github/workflows/catalog.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalog-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements-dev.txt
+
+      - name: Validate catalog
+        run: python scripts/validate_catalog.py
+
+      - name: Markdown lists are current
+        run: python scripts/generate_markdown_lists.py --check
+
+      - name: Search index is current
+        run: python scripts/generate_search_index.py --check
+
+      - name: Generated pages are current
+        run: python scripts/generate_resource_pages.py --check
+
+      - name: Catalog statistics
+        if: always()
+        run: |
+          {
+            echo "## Catalog"
+            echo ""
+            echo '```'
+            python scripts/validate_catalog.py --max-warnings 0 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,65 @@
+# Builds and smoke-tests the static site.
+#
+# There is no build step — the site is plain HTML — so "build" here means
+# regenerate from the catalog and confirm nothing drifted, then drive the real
+# pages in a real browser.
+name: Site
+
+on:
+  push:
+    branches: [main]
+    paths: ["public/**", "catalog/**", "scripts/**", ".github/workflows/site.yml"]
+  pull_request:
+    paths: ["public/**", "catalog/**", "scripts/**", ".github/workflows/site.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip && pip install -r requirements-dev.txt
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Generated pages are current
+        run: |
+          python scripts/generate_search_index.py --check
+          python scripts/generate_resource_pages.py --check
+
+      - name: Serve and smoke test
+        run: |
+          python -m http.server 8899 --directory public &
+          for i in $(seq 1 20); do
+            curl -sf -o /dev/null "http://127.0.0.1:8899/" && break
+            sleep 0.5
+          done
+          node scripts/site_smoke_test.js
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: site-screenshots
+          path: "*.png"
+          if-no-files-found: ignore
+          retention-days: 14

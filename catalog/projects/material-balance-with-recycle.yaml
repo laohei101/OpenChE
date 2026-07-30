@@ -1,0 +1,218 @@
+# Canonical project record. Pilot for the Project Lab (spec section 9).
+#
+# This one was chosen as the pilot because the starter material already exists
+# and has been executed: templates/mass_balance_notebook.ipynb runs end to end
+# with every balance closing to machine precision. A pilot whose starter does
+# not run would prove nothing about the schema.
+
+schema_version: 1
+slug: material-balance-with-recycle
+title: Material Balance with Recycle
+
+problem_statement: >
+  A dilute ethanol stream is concentrated in a distillation column. The bottoms
+  go to a settler that returns part of its flow to the feed. Given the fresh
+  feed rate and composition, the distillate and bottoms specifications, and the
+  recycle fraction, determine every internal flow and composition — then show
+  how the column feed rate responds to the recycle ratio, and decide whether the
+  recycle is worth the capital it costs.
+
+domains:
+  - chemical-engineering
+audiences:
+  - student
+  - educator
+difficulty: beginner
+
+estimated_hours:
+  min: 4
+  max: 8
+
+cost:
+  currency: USD
+  max: 0
+  notes: Everything needed is open source. No hardware, no licences.
+
+requirements:
+  software:
+    - Python 3.11 or newer
+    - numpy, matplotlib
+  resources:
+    - pyomo
+  datasets: []
+
+prerequisites:
+  - A first course in material and energy balances.
+  - Able to solve a two-equation linear system by hand.
+  - "Basic Python: assigning variables, calling a function, running a notebook cell."
+
+learning_outcomes:
+  - Set up a steady-state material balance as a linear system and explain what each matrix row means physically.
+  - Count degrees of freedom and recognise an under-specified problem before trying to solve it.
+  - Explain why a recycle stream increases internal flows faster than it increases the recycle ratio.
+  - State the difference between an arithmetically consistent balance and a thermodynamically feasible one.
+
+engineering_concepts:
+  - conservation of mass
+  - degrees of freedom
+  - recycle and purge
+  - linear systems
+  - azeotropes
+
+starter:
+  template_path: templates/mass_balance_notebook.ipynb
+  input_data: Self-contained. All feed conditions are defined in the notebook.
+
+milestones:
+  - title: Solve the two-stream mixer by hand
+    outcome: >
+      A paper solution for the mixer in Section 1, before running any code. This is
+      the reference the rest of the project is checked against — do not skip it.
+    estimated_hours: 0.5
+  - title: Reproduce the hand solution in code
+    outcome: Section 1 of the notebook runs and agrees with your paper answer to machine precision.
+    estimated_hours: 0.5
+  - title: Build the recycle flowsheet as a linear system
+    outcome: >
+      A 5x5 coefficient matrix whose rows you can each name (mixer total, column
+      total, column ethanol, settler total, settler split), solved with numpy.
+    estimated_hours: 2
+  - title: Close every balance
+    outcome: >
+      Overall and per-unit component balances all close to within 1e-6 relative.
+      A failing check is the deliverable at this stage, not a reason to move on.
+    estimated_hours: 1
+  - title: Sweep the recycle ratio
+    outcome: >
+      A plot of column feed, recycle, and waste flow against recycle fraction from
+      0 to 0.85, with the design point marked.
+    estimated_hours: 1.5
+  - title: Write it up
+    outcome: A README with the stream table, the plot, your assumptions, and the feasibility caveat.
+    estimated_hours: 1.5
+
+expected_outputs:
+  - Stream table with mass flow, mass fraction, and component flows for all six streams.
+  - Balance-closure table showing relative error per unit and per component.
+  - Recycle sensitivity plot.
+  - A stated conclusion on whether the recycle is justified.
+
+validation:
+  checks:
+    - description: >
+        The two-stream mixer in Section 1 must match a hand calculation exactly.
+        This is the anchor for everything downstream.
+      method: hand-calculation
+      tolerance: exact to displayed precision
+    - description: >
+        Total mass in equals total mass out around every unit and around the whole
+        flowsheet. The recycle stream must not appear in the overall envelope.
+      method: conservation-law
+      tolerance: relative error < 1e-6
+    - description: >
+        Ethanol closes independently of water. Checking only the total hides a
+        composition error that swaps the two.
+      method: conservation-law
+      tolerance: relative error < 1e-6
+    - description: >
+        Every composition lies in [0, 1] and the fractions in each stream sum to 1.
+      method: unit-consistency
+      tolerance: 1e-9
+    - description: >
+        The distillate specification must sit below the ethanol-water azeotrope at
+        1 atm. A balance will happily return 98 wt% ethanol, which no simple column
+        can produce.
+      method: analytical-limit
+      reference: >
+        Ethanol-water forms a minimum-boiling azeotrope at approximately 95.6 wt%
+        ethanol at 1 atm. Confirm against a current thermodynamic reference before
+        citing the number in a report.
+  known_limitations:
+    - Steady state only. No accumulation term, so this says nothing about start-up.
+    - No energy balance, so the column duty and the feasibility of the separation are out of scope.
+    - Constant density is assumed, which is reasonable for dilute aqueous streams and not in general.
+    - Arithmetic consistency is not thermodynamic feasibility. The balance cannot tell you the separation is possible.
+
+safety_level: physical-none
+
+deliverables:
+  - Completed notebook with all cells executed in order.
+  - README following the portfolio structure below.
+  - Recycle sensitivity figure as PNG or SVG.
+
+report_structure:
+  - Problem statement and basis
+  - Flowsheet diagram with labelled streams
+  - Assumptions table
+  - Degrees of freedom analysis
+  - Method
+  - Stream table
+  - Balance closure verification
+  - Recycle sensitivity
+  - Limitations
+  - Conclusion
+
+portfolio_readme_sections:
+  - What this project does, in two sentences
+  - How to run it
+  - The engineering question and the answer
+  - How the answer was checked
+  - What the model does not establish
+
+resume_bullets:
+  - >
+    Built a steady-state material balance for a three-unit separation flowsheet with
+    recycle in Python, formulating it as a 5x5 linear system and verifying closure
+    to within 1e-6 relative error on every unit and component.
+  - >
+    Quantified the effect of recycle ratio on column feed rate across a 0-85% sweep,
+    showing internal flow rising 38% at the 30% design point.
+
+extensions:
+  - Add a purge stream and find the inert accumulation limit.
+  - Replace the fixed split with a specified overall conversion and solve the resulting nonlinear system with scipy.optimize.
+  - Add an energy balance and estimate the reboiler duty.
+  - Rebuild the same flowsheet in DWSIM and compare the stream table against your hand-built model.
+
+rubric:
+  - criterion: Balances close and the closure check is shown, not asserted
+    weight: 0.3
+    excellent: Per-unit and per-component closure reported with numerical residuals.
+  - criterion: Degrees of freedom analysed before solving
+    weight: 0.15
+    excellent: Unknowns and independent equations counted explicitly and shown to match.
+  - criterion: Assumptions stated and their consequences understood
+    weight: 0.2
+    excellent: Each assumption is named with the direction and size of its effect.
+  - criterion: Feasibility discussed, not just arithmetic
+    weight: 0.2
+    excellent: The azeotrope limit is identified and the specification checked against it.
+  - criterion: Presentation and reproducibility
+    weight: 0.15
+    excellent: Another person can rerun the notebook and get the same numbers.
+
+license: MIT
+
+verification:
+  tier: 3
+  status: run-end-to-end
+  checked_at: "2026-07-29"
+  checked_by: openche-maintainers
+  notes:
+    - >
+      The starter notebook was executed cell by cell in order; all four sections run
+      and every balance closes to machine precision (relative error 0.0 to 1.9e-16).
+    - >
+      Executed with Python 3.11, numpy 2.x, matplotlib 3.x. The environment was not
+      pinned to exact versions, so this is reproducibility evidence, not a pinned
+      reproduction. Pinning is tracked for Phase 1.
+    - >
+      The rubric and estimated hours are editorial judgement and have not been
+      classroom-tested. Treat them as a starting point.
+
+tags:
+  - material-balance
+  - recycle
+  - numpy
+  - notebook
+  - portfolio

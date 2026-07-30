@@ -1,0 +1,42 @@
+# Canonical catalog record. Edit this, not the generated views.
+schema_version: 1
+slug: rdkit-discussions
+name: RDKit Discussions
+kind: community
+canonical_url: https://github.com/rdkit/rdkit/discussions
+summary: Where the maintainers answer; searchable and consistently high quality
+domains:
+- chemoinformatics
+categories:
+- community
+- benchmarks
+audiences:
+- student
+- researcher
+- industry
+access:
+  model: unknown
+  free_tier: true
+  notes: The legacy list guaranteed the resource is free to use, but the access model was never recorded.
+    Needs confirmation.
+license:
+  spdx: UNKNOWN
+  source: unknown
+  notes: Not recorded in the legacy list. Confirm from the project before promoting this record above
+    verification tier 1.
+maturity: unknown
+maintenance_status: unknown
+verification:
+  tier: 0
+  status: submitted
+  notes:
+  - Imported from the legacy Markdown list; no field has been independently confirmed.
+  - 'Merged duplicate record ''dataset-splitting-strategies-rdkit-discussions'' (same canonical URL).
+    Its description was: Not a package but a recurring discussion worth reading: random splits inflate
+    molecular ML results, scaffold and temporal splits show whether a model generalises'
+link_status: unknown
+source_list: awesome-chemoinformatics
+source_section: Community
+tags:
+- forum
+- methodology

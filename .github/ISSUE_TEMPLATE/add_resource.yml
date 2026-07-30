@@ -1,0 +1,100 @@
+name: 📚 Suggest a resource
+description: Propose a tool, library, dataset, textbook, or course for one of the awesome lists.
+title: "[resource] "
+labels: ["resource-suggestion", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting something. **You don't have to use this form** — a pull request
+        adding the line yourself is faster for everyone, and the web editor makes it a two-minute
+        job. Use this if you'd rather someone else place it, or you're unsure it fits.
+
+        Please check the list first; we get a lot of duplicate CoolProp suggestions.
+
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      placeholder: CoolProp
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Canonical URL
+      description: Project home or repository. Not a blog post, not a tracking link.
+      placeholder: https://github.com/CoolProp/CoolProp
+    validations:
+      required: true
+
+  - type: dropdown
+    id: list
+    attributes:
+      label: Which list?
+      options:
+        - awesome-chemical-engineering
+        - awesome-chemoinformatics
+        - awesome-bioengineering
+        - awesome-medical-engineering
+        - awesome-general-engineering
+        - Not sure — please place it
+    validations:
+      required: true
+
+  - type: input
+    id: section
+    attributes:
+      label: Which section?
+      description: Existing section heading, or "new section" with your proposed name.
+      placeholder: Thermodynamics & Properties
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: One-sentence description
+      description: >-
+        What it does, in your own words, under about 140 characters. Not marketing copy —
+        say what a reader would use it for.
+      placeholder: >-
+        Thermophysical property library for ~120 fluids and humid air, with Helmholtz-energy
+        equations of state and bindings for most languages.
+    validations:
+      required: true
+
+  - type: input
+    id: licence
+    attributes:
+      label: Licence
+      description: MIT, GPL-3.0, CC BY 4.0, "free tier", "public domain dataset"…
+      placeholder: MIT
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why does this belong here?
+      description: >-
+        Have you used it? What does it do that the resources already listed don't? If it
+        overlaps with an existing entry, say how a reader should choose between them.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: criteria
+    attributes:
+      label: Inclusion criteria
+      description: See [CONTRIBUTING.md](https://github.com/OpenChemE/.github/blob/main/CONTRIBUTING.md#what-we-accept-and-what-we-dont).
+      options:
+        - label: It's freely usable — open source, open access, or a genuinely usable free tier
+          required: true
+        - label: It's maintained (activity in the last ~2 years) or complete and doesn't need maintenance
+          required: true
+        - label: I searched the list and this isn't already there
+          required: true
+        - label: I'm affiliated with this project (tick if true — that's fine, we just like knowing)
+          required: false

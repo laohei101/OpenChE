@@ -1,0 +1,23 @@
+# Review routing. Matches the areas in MAINTAINERS.md.
+#
+# Areas marked "Seeking" there fall through to the project lead, so no pull
+# request sits unrouted. When an area gains a maintainer, add them here and in
+# MAINTAINERS.md in the same commit.
+
+*                       @laohei101
+
+# Schema and generators: every record and every generated view depends on these,
+# so they always want the project lead's eyes regardless of who else reviews.
+/schemas/               @laohei101
+/scripts/               @laohei101
+/catalog/taxonomies/    @laohei101
+
+# Governance and anything that makes a promise to contributors.
+/GOVERNANCE.md          @laohei101
+/MAINTAINERS.md         @laohei101
+/CODE_OF_CONDUCT.md     @laohei101
+/SECURITY.md            @laohei101
+/CLAUDE.md              @laohei101
+
+# Safety-adjacent content. No qualified reviewer yet — see MAINTAINERS.md.
+/templates/safety_checklist.md   @laohei101

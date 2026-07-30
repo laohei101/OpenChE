@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "OpenChemE: a verified open catalog for chemical engineering"
+message: >-
+  If you use this catalog, its templates, or its workflows in published work,
+  please cite it. Cite the specific release you used, not the moving default
+  branch, so the state you relied on is recoverable.
+type: dataset
+authors:
+  - family-names: Dai
+    given-names: Kevin
+    email: yu.dai@mail.utoronto.ca
+    affiliation: University of Toronto
+  - name: OpenChemE contributors
+repository-code: "https://github.com/laohei101/OpenChemE"
+abstract: >-
+  A curated, structured catalog of open-source software, datasets, and learning
+  resources for chemical engineering, chemoinformatics, bioengineering, medical
+  engineering, and adjacent fields. Records carry explicit verification tiers
+  and dated evidence, so a reader can tell what has been independently checked
+  from what has only been recorded. Ships with runnable engineering templates
+  and reproducible computational workflows.
+keywords:
+  - chemical engineering
+  - process simulation
+  - open source
+  - research software
+  - reproducibility
+  - curated catalog
+license: CC-BY-4.0
+license-url: "https://creativecommons.org/licenses/by/4.0/"

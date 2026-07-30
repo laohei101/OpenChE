@@ -1,0 +1,23 @@
+# Development and CI dependencies for OpenChemE.
+#
+# Pinned with lower bounds rather than exact pins: this is tooling, not a
+# reproducible scientific environment. The environments that DO need exact pins
+# (workflows/snakemake/environment.yaml, workflows/docker/environment.yaml)
+# pin exactly, and must keep doing so.
+
+# --- catalog tooling ---
+PyYAML>=6.0
+jsonschema>=4.20
+
+# --- numerical templates ---
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+
+# --- tests ---
+pytest>=8.0
+nbclient>=0.9          # notebook smoke tests
+nbformat>=5.9
+
+# --- lint ---
+ruff>=0.5
